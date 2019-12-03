@@ -1,0 +1,2 @@
+INSERT INTO Message(author, title, content, mtimestamp, visibility, receiver, lat, lng) VALUE
+(11, 'Posting test case', 'Hi there! I am testing the c2 by posting a new message', CURRENT_TIMESTAMP, 'hood', NULL, 1.1, 1.1);

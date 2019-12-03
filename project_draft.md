@@ -1,15 +1,15 @@
 # Schemas
 
-1. User (*uid*, email, password, fname, lname, street_addr, cid, profile, photo)
-2. Hood (*hid*, name, sw_lat, sw_lng, ne_lat, ne_long, population)
-3. Block (*bid*, name, sw_lat, sw_lng, ne_lat, ne_lng, population)
+1. Users (*uid*, email, pword, fname, lname, street_addr, cid, uprofile, photo, last_login_timestamp)
+2. Hood (*hid*, hname, sw_lat, sw_lng, ne_lat, ne_long, hpopulation)
+3. Blocks (*bid*, bname, sw_lat, sw_lng, ne_lat, ne_lng, bpopulation)
 4. Location (*bid*, *hid*, *cid*)
 5. Membership (*uid*, *bid*, approval_count)
-6. Friendship (*follower*, *followee*, *timestamp*, status)
-7. Neighboring (*initiator*, *acceptor*, *timestamp*)
-8. Message (*mid*, author, subject, content, timestamp, level, receiver, lat, lng)
-9. Reply (*rid*, *mid*, author, content, timestamp)
-10. Thread (*uid*, *mid*, read, level)
+6. Friendship (*follower*, *followee*, *ftimestamp*, fstatus)
+7. Neighboring (*initiator*, *acceptor*, *ntimestamp*)
+8. Message (*mid*, author, title, content, mtimestamp, visibility, receiver, lat, lng)
+9. Reply (*rid*, *mid*, author, content, rtimestamp)
+10. Thread (*uid*, *mid*, tstatus, ttimestamp)
 11. City (*cid*, cname, state)
 
 User:
