@@ -20,5 +20,5 @@ class Users(UserMixin, db.Model):
 
 class City(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    canme = db.Column(db.String(45), nullable=False)
+    cname = db.Column(db.String(45), nullable=False)
     cstate = db.Column(db.String(45), nullable=False)

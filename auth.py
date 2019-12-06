@@ -9,6 +9,7 @@ from datetime import datetime
 #-------------------------------------------------------------------------------
 from . import db
 from .models import Users
+from .models import City
 #-------------------------------------------------------------------------------
 
 auth = Blueprint('auth', __name__)
@@ -46,6 +47,9 @@ def signup_post():
     fname = request.form.get('first-name')
     lname = request.form.get('last-name')
     pword = request.form.get('password')
+    street_addr = request.form.get('street-address')
+    cname = request.form.get('city')
+    cstate = request.form.get('state')
 
     user = Users.query.filter_by(email=email).first() # if this returns a user, then the email already exists in database
 
@@ -54,7 +58,16 @@ def signup_post():
         return redirect(url_for('auth.signup'))
 
     # create new user with the form data. Hash the password so plaintext version isn't saved.
-    new_user = Users(email=email, fname=fname, lname=lname,pword=generate_password_hash(pword, method='sha256'), street_addr='Neverland', cid=1, last_login_timestamp=datetime.now())
+    city = City.query.filter_by(cname=cname, cstate=cstate).first()
+    if city:
+        cid = city.id
+    else:
+        new_city = City(cname=cname, cstate=cstate)
+        db.session.add(new_city)
+        db.session.commit()
+        cid = City.query.filter_by(cname=cname, cstate=cstate).first().id
+    
+    new_user = Users(email=email, fname=fname, lname=lname,pword=generate_password_hash(pword, method='sha256'), street_addr=street_addr, cid=cid, last_login_timestamp=datetime.now())
 
     # add the new user to the database
     db.session.add(new_user)
