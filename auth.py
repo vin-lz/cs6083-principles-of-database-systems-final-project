@@ -51,7 +51,8 @@ def signup_post():
     email = request.form.get('email')
     first_name = request.form.get('first-name')
     last_name = request.form.get('last-name')
-    password = request.form.get('password')
+    new_password = request.form.get('new-password')
+    confirm_password = request.form.get('confirm-password')
     street_address = request.form.get('street-address')
     city_name = request.form.get('city')
     city_state = request.form.get('state')
@@ -60,28 +61,38 @@ def signup_post():
     user = Users.query.filter_by(email=email).first()
 
     if user:  # if a user is found, we want to redirect back to signup page so user can try again
-        flash('Email address already exists')
+        flash('Email address already exists, please try login')
         return redirect(url_for('auth.signup'))
 
     # create new user with the form data. Hash the password so plaintext version isn't saved.
-    city = City.query.filter_by(cname=city_name, cstate=city_state).first()
-    if city:
-        city_id = city.id
+
+    if email and first_name and last_name and new_password and confirm_password and street_address and city_name and city_state:
+        if new_password != confirm_password:
+            flash('Passwords do not match')
+            return redirect(url_for('auth.signup'))
+        else:
+            city = City.query.filter_by(cname=city_name, cstate=city_state).first()
+            if city:
+                city_id = city.id
+            else:
+                new_city = City(cname=city_name, cstate=city_state)
+                db.session.add(new_city)
+                db.session.commit()
+                cid = City.query.filter_by(
+                cname=city_name, cstate=city_state).first().id
+
+                new_user = Users(email=email, fname=first_name, lname=last_name, pword=generate_password_hash(
+                new_password, method='sha256'), street_addr=street_address, cid=city_id, last_login_timestamp=datetime.now())
+
+                # add the new user to the database
+                db.session.add(new_user)
+                db.session.commit()
+
+                return redirect(url_for('auth.login'))
+
     else:
-        new_city = City(cname=city_name, cstate=city_state)
-        db.session.add(new_city)
-        db.session.commit()
-        cid = City.query.filter_by(cname=cityname, cstate=city_state).first().id
-
-    new_user = Users(email=email, fname=first_name, lname=last_name, pword=generate_password_hash(
-        password, method='sha256'), street_addr=street_address, cid=city_id, last_login_timestamp=datetime.now())
-
-    # add the new user to the database
-    db.session.add(new_user)
-    db.session.commit()
-
-    return redirect(url_for('auth.login'))
-
+        flash('Missing mandatory infomation')
+        return redirect(url_for('auth.signup'))
 
 @auth.route('/logout')
 @login_required
