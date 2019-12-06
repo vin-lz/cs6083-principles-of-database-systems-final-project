@@ -1,7 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="title">
-  Welcome, {{fname}} {{lname}}!
-</h1>
+<div class="column is-4 is-offset-4">
+    <h1 class="title">
+        Welcome, {{fname}} {{lname}}!
+    </h1>
+    <div class="box">
+        <form method="POST" action="/update-profile">
+            <div class="field">
+                <label class="label has-text-left">Street Address</label>
+                <div class="control">
+                    <input class="input is-large" type="txt" name="street-address" placeholder="Street Address"
+                        autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label has-text-left">Profile</label>
+                <div class="control">
+                    <textarea class="textarea is-large" name="profile" placeholder="Profile" autofocus=""></textarea>
+                </div>
+            </div>
+
+            <button class="button is-block is-info is-large is-fullwidth">Save Change</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

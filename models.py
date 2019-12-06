@@ -1,10 +1,11 @@
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 from flask_login import UserMixin
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 from . import db
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 from datetime import datetime
-#-------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+
 
 class Users(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -16,7 +17,8 @@ class Users(UserMixin, db.Model):
     cid = db.Column(db.String(45), nullable=False)
     uprofile = db.Column(db.String(280))
     photo = db.Column(db.String(45))
-    last_login_timestamp = db.Column(db.DateTime,default=datetime.now() )
+    last_login_timestamp = db.Column(db.DateTime, default=datetime.now())
+
 
 class City(db.Model):
     id = db.Column(db.Integer, primary_key=True)
