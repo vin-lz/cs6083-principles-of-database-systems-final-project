@@ -3,26 +3,56 @@
 {% block content %}
 <div class="column is-4 is-offset-4">
     <h1 class="title">
-        Welcome, {{fname}} {{lname}}!
+        Welcome, {{ user.fname }} {{ user.lname }}!
     </h1>
     <div class="box">
-        <form method="POST" action="/update-profile">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="notification is-danger">
+            {{ messages[0] }}.
+        </div>
+        {% endif %}
+        {% endwith %}
+        <form method="POST" action="/account">
+            <label class="label has-text-left">Email</label>
+            <p class="has-text-left">{{ user.email }}</p>
+
+            <label class="label has-text-left">First name</label>
+            <p class="has-text-left">{{ user.fname }}</p>
+
+            <label class="label has-text-left">Last name</label>
+            <p class="has-text-left">{{ user.lname }}</p>
+
             <div class="field">
-                <label class="label has-text-left">Street Address</label>
+                <label class="label has-text-left">New password</label>
                 <div class="control">
-                    <input class="input is-large" type="txt" name="street-address" placeholder="Street Address"
-                        autofocus="">
+                    <input class="input" type="password" name="new-password" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label has-text-left">Confirm password</label>
+                <div class="control">
+                    <input class="input" type="password" name="confirm-password" autofocus="">
+                </div>
+            </div>
+
+            <div class="field">
+                <label class="label has-text-left">Street address</label>
+                <div class="control">
+                    <input class="input" type="txt" name="street-address" value='{{ user.street_addr }}' autofocus="">
                 </div>
             </div>
 
             <div class="field">
                 <label class="label has-text-left">Profile</label>
                 <div class="control">
-                    <textarea class="textarea is-large" name="profile" placeholder="Profile" autofocus=""></textarea>
+                    <textarea class="textarea" name="profile"
+                        autofocus="">{% if user.uprofile %}{{ user.uprofile }}{% endif %}</textarea>
                 </div>
             </div>
 
-            <button class="button is-block is-info is-large is-fullwidth">Save Change</button>
+            <button class="button is-block is-info is-fullwidth">Save</button>
         </form>
     </div>
 </div>

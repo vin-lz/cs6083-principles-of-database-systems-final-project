@@ -23,14 +23,14 @@ def login():
 @auth.route('/login', methods=['POST'])
 def login_post():
     email = request.form.get('email')
-    pword = request.form.get('password')
+    password = request.form.get('password')
     remember = True if request.form.get('remember') else False
 
     user = Users.query.filter_by(email=email).first()
 
     # check if user actually exists
     # take the user supplied password, hash it, and compare it to the hashed password in database
-    if not user or not check_password_hash(user.pword, pword):
+    if not user or not check_password_hash(user.pword, password):
         flash('Please check your login credentials and try again.')
         # if user doesn't exist or password is wrong, reload the page
         return redirect(url_for('auth.login'))
@@ -49,12 +49,12 @@ def signup():
 def signup_post():
 
     email = request.form.get('email')
-    fname = request.form.get('first-name')
-    lname = request.form.get('last-name')
-    pword = request.form.get('password')
-    street_addr = request.form.get('street-address')
-    cname = request.form.get('city')
-    cstate = request.form.get('state')
+    first_name = request.form.get('first-name')
+    last_name = request.form.get('last-name')
+    password = request.form.get('password')
+    street_address = request.form.get('street-address')
+    city_name = request.form.get('city')
+    city_state = request.form.get('state')
 
     # if this returns a user, then the email already exists in database
     user = Users.query.filter_by(email=email).first()
@@ -64,17 +64,17 @@ def signup_post():
         return redirect(url_for('auth.signup'))
 
     # create new user with the form data. Hash the password so plaintext version isn't saved.
-    city = City.query.filter_by(cname=cname, cstate=cstate).first()
+    city = City.query.filter_by(cname=city_name, cstate=city_state).first()
     if city:
-        cid = city.id
+        city_id = city.id
     else:
-        new_city = City(cname=cname, cstate=cstate)
+        new_city = City(cname=city_name, cstate=city_state)
         db.session.add(new_city)
         db.session.commit()
-        cid = City.query.filter_by(cname=cname, cstate=cstate).first().id
+        cid = City.query.filter_by(cname=cityname, cstate=city_state).first().id
 
-    new_user = Users(email=email, fname=fname, lname=lname, pword=generate_password_hash(
-        pword, method='sha256'), street_addr=street_addr, cid=cid, last_login_timestamp=datetime.now())
+    new_user = Users(email=email, fname=first_name, lname=last_name, pword=generate_password_hash(
+        password, method='sha256'), street_addr=street_address, cid=city_id, last_login_timestamp=datetime.now())
 
     # add the new user to the database
     db.session.add(new_user)
