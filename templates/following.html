@@ -12,7 +12,10 @@
         {% endif %}
         {% endwith %}
         <ul>
+            {% if pending_count != 0 %}
+            <h3 class="subtitle  is-4 has-text-primary">Pending friendship</h3>
             {% for i in users_friendship %}
+            {% if i[1].fstatus=='pending' %}
             <li>
                 <form method="POST" action="/follow">
                     <div class="field level">
@@ -20,12 +23,35 @@
                         <div class="control">
                             <input type="hidden" name="follower" value="{{ i[1].follower }}">
                             <input type="hidden" name="followee" value="{{ i[1].followee }}">
-                            <input class="button is-small is-primary is-outlined" type="submit" value="Unfollow">
+                            <input class="button is-small is-primary is-outlined" type="submit" name="action" value="Accept">
+                            <input class="button is-small is-primary is-outlined" type="submit" name="action" value="Reject">
                         </div>
                     </div>
                 </form>
-            </il>
-            {% endfor %}
+                </il>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+        </ul>
+        <ul>
+            <h3 class="subtitle  is-4 has-text-primary">Friends</h3>
+            {% for i in users_friendship %}
+            {% if i[1].fstatus=='accepted' %}
+            <li>
+                <form method="POST" action="/follow">
+                    <div class="field level">
+                        <label class="level-left">{{i[0].fname}} {{i[0].lname}} </label>
+                        <div class="control">
+                            <input type="hidden" name="follower" value="{{ i[1].follower }}">
+                            <input type="hidden" name="followee" value="{{ i[1].followee }}">
+                            <!-- <input type="hidden" name="action" value="unfollow"> -->
+                            <input class="button is-small is-primary is-outlined" type="submit" name="action" value="Unfollow">
+                        </div>
+                    </div>
+                </form>
+                </il>
+                {% endif %}
+                {% endfor %}
         </ul>
     </div>
 </div>
