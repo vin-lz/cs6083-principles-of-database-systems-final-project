@@ -84,12 +84,12 @@ def signup_post():
                 city_id = City.query.filter_by(
                 cname=city_name, cstate=city_state).first().id
 
-                new_user = Users(email=email, fname=first_name, lname=last_name, pword=generate_password_hash(
-                new_password, method='sha256'), street_addr=street_address, cid=city_id, last_login_timestamp=datetime.now())
+            new_user = Users(email=email, fname=first_name, lname=last_name, pword=generate_password_hash(
+            new_password, method='sha256'), street_addr=street_address, cid=city_id, last_login_timestamp=datetime.now())
 
                 # add the new user to the database
-                db.session.add(new_user)
-                db.session.commit()
+            db.session.add(new_user)
+            db.session.commit()
         # Successful!
         return redirect(url_for('auth.login'))
         # Missing info!

@@ -1,3 +1,15 @@
 {
-    "python.pythonPath": "venv/bin/python3"
+    "python.pythonPath": "venv/bin/python3",
+    "cSpell.words": [
+        "cname",
+        "fname",
+        "followee",
+        "fstatus",
+        "ftimestamp",
+        "lname",
+        "ntimestamp",
+        "pword",
+        "unfollow",
+        "uprofile"
+    ]
 }

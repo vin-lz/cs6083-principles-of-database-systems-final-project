@@ -30,3 +30,8 @@ class Friendship(db.Model):
     followee = db.Column(db.Integer, primary_key=True)
     ftimestamp = db.Column(db.DateTime, default=datetime.now())
     fstatus = db.Column(db.String(45), default='pending')
+
+class Neighboring(db.Model):
+    initiator = db.Column(db.Integer, primary_key=True)
+    acceptor =db.Column(db.Integer, primary_key=True)
+    ntimestamp = db.Column(db.DateTime, default=datetime.now())

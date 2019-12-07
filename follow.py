@@ -11,12 +11,20 @@ from . import db
 from .models import Users
 from .models import City
 from .models import Friendship
+from .models import Neighboring
 # ------------------------------------------------------------------------------
 
 follow = Blueprint('follow', __name__)
 
+# @follow.route('/follow')
+# @login_required
+# def gate():
+#     if request.form.get('category')=='Neighbors':
+#         return redirect(url_for('follow.neighbor'))
+#     else:
+#         return redirect(url_for('follow.friendship'))
 
-@follow.route('/follow')
+@follow.route('/friends')
 @login_required
 def friendship():
     results = []
@@ -32,7 +40,8 @@ def friendship():
         friend_id_list.append(r.followee)
 
     friend_id_list_sorted = list(set(friend_id_list))
-    friend_id_list_sorted.remove(current_user.id)
+    if current_user.id in friend_id_list_sorted:
+        friend_id_list_sorted.remove(current_user.id)
 
     users_friendship = []
     pending_count = 0
@@ -50,10 +59,10 @@ def friendship():
             [Users.query.filter_by(id=f).first(), friendship])
     # print('-------------')
     # print(users_friendship)
-    return render_template('following.html', users_friendship=users_friendship, pending_count=pending_count)
+    return render_template('friends.html', users_friendship=users_friendship, pending_count=pending_count, accepted_count=len(users_friendship)-pending_count)
 
 
-@follow.route('/follow', methods=['POST'])
+@follow.route('/friends', methods=['POST'])
 @login_required
 def friendship_post():
     follower = request.form.get('follower')
@@ -65,11 +74,49 @@ def friendship_post():
         db.session.delete(Friendship.query.filter_by(
             follower=follower, followee=followee).first())
         db.session.commit()
+        if follower == current_user.id:
+            flash('You has unfollowed %s %s' % (Users.query.filter_by(id=followee).first().fname, Users.query.filter_by(id=followee).first().lname))
+        else:
+            flash('You has unfollowed %s %s' % (Users.query.filter_by(id=follower).first().fname, Users.query.filter_by(id=follower).first().lname))
     if action == 'Accept':
         Friendship.query.filter_by(follower=follower, followee=current_user.id, fstatus='pending').first().fstatus = 'accepted'
         db.session.commit()
+        flash('You has accepted %s %s\'s friend request' % (Users.query.filter_by(id=follower).first().fname, Users.query.filter_by(id=follower).first().lname))
     elif action == 'Reject':
         Friendship.query.filter_by(follower=follower, followee=current_user.id, fstatus='pending').first().fstatus = 'rejected'
         db.session.commit()
+        flash('You has rejected %s %s\'s friend request' % (Users.query.filter_by(id=follower).first().fname, Users.query.filter_by(id=follower).first().lname))
 
     return redirect(url_for('follow.friendship'))
+
+@follow.route('/neighbors')
+@login_required
+def neighbor():
+    results = []
+    results.extend(Neighboring.query.filter_by(initiator=current_user.id).all())
+
+    neighbor_id_list = []
+    for r in results:
+        neighbor_id_list.append(r.acceptor)
+    
+    neighbor_id_list_sorted = sorted(neighbor_id_list)
+
+    users_neighboring = []
+    neighbor_count = 0
+    for n in neighbor_id_list_sorted:
+        users_neighboring.append([Users.query.filter_by(id=n).first(), Neighboring.query.filter_by(initiator=current_user.id, acceptor=n).first()])
+        neighbor_count = neighbor_count + 1
+
+    return render_template('neighbors.html', users_neighboring=users_neighboring, neighbor_count=neighbor_count)
+
+@follow.route('/neighbors', methods=['POST'])
+@login_required
+def neighbor_post():
+    acceptor = request.form.get('neighbor')
+    action = request.form.get('action')
+    if action == 'Unfollow':
+        db.session.delete(Neighboring.query.filter_by(initiator=current_user.id, acceptor=acceptor).first())
+        db.session.commit()
+        flash('You has unfollowed %s %s' % (Users.query.filter_by(id=acceptor).first().fname, Users.query.filter_by(id=acceptor).first().lname))
+
+    return redirect(url_for('follow.neighbor'))
