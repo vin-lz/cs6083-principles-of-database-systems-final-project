@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+    <h3 class="title">Following</h3>
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="notification is-danger">
+            {{ messages[0] }}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <ul>
+            {% for i in users_friendship %}
+            <li>
+                <form method="POST" action="/follow">
+                    <div class="field level">
+                        <label class="level-left">{{i[0].fname}} {{i[0].lname}} </label>
+                        <div class="control">
+                            <input type="hidden" name="follower" value="{{ i[1].follower }}">
+                            <input type="hidden" name="followee" value="{{ i[1].followee }}">
+                            <input class="button is-small is-primary is-outlined" type="submit" value="Unfollow">
+                        </div>
+                    </div>
+                </form>
+            </il>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

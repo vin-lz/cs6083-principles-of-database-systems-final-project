@@ -5,6 +5,10 @@ from flask_sqlalchemy import SQLAlchemy
 # ------------------------------------------------------------------------------
 from flask_login import LoginManager
 # ------------------------------------------------------------------------------
+import logging
+
+logging.basicConfig()
+logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
 db = SQLAlchemy()
 
@@ -34,6 +38,8 @@ def create_app():
 
     # blueprint for non-auth parts of app
     from .main import main as main_blueprint
+    from .follow import follow as follow_blueprint
     app.register_blueprint(main_blueprint)
+    app.register_blueprint(follow_blueprint)
 
     return app

@@ -22,7 +22,7 @@
                                 Home
                             </a>
                             {% if current_user.is_authenticated %}
-                            <a href="{{ url_for('main.account') }}" class="navbar-item">
+                            <a href="{{ url_for('auth.account') }}" class="navbar-item">
                                 Account
                             </a>
                             {% endif %}
