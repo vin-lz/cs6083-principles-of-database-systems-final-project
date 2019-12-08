@@ -14,7 +14,7 @@ class Users(UserMixin, db.Model):
     fname = db.Column(db.String(45), nullable=False)
     lname = db.Column(db.String(45), nullable=False)
     street_addr = db.Column(db.String(45), nullable=False)
-    cid = db.Column(db.String(45), nullable=False)
+    cid = db.Column(db.String(45), db.ForeignKey('City.id'), nullable=False)
     uprofile = db.Column(db.Text)
     photo = db.Column(db.String(45))
     last_login_timestamp = db.Column(db.DateTime, default=datetime.now())
@@ -27,15 +27,15 @@ class City(db.Model):
 
 
 class Friendship(db.Model):
-    follower = db.Column(db.Integer, primary_key=True)
-    followee = db.Column(db.Integer, primary_key=True)
+    follower = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
+    followee = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
     ftimestamp = db.Column(db.DateTime, default=datetime.now())
     fstatus = db.Column(db.String(45), default='pending')
 
 
 class Neighboring(db.Model):
-    initiator = db.Column(db.Integer, primary_key=True)
-    acceptor = db.Column(db.Integer, primary_key=True)
+    initiator = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
+    acceptor = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
     ntimestamp = db.Column(db.DateTime, default=datetime.now())
 
 
@@ -47,3 +47,19 @@ class Hood(db.Model):
     sw_lat = db.Column(db.Float, nullable=False)
     sw_lat = db.Column(db.Float, nullable=False)
     hpopulation = db.Column(db.Integer, nullable=False)
+
+
+class Blocks(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    bname = db.Column(db.String(45), nullable=False)
+    sw_lat = db.Column(db.Float, nullable=False)
+    sw_lat = db.Column(db.Float, nullable=False)
+    sw_lat = db.Column(db.Float, nullable=False)
+    sw_lat = db.Column(db.Float, nullable=False)
+    bpopulation = db.Column(db.Integer, nullable=False)
+
+
+class Location(db.Model):
+    bid = db.Column(db.Integer, primary_key=True)
+    hid = db.Column(db.Integer, db.ForeignKey('Hood.id'), primary_key=True)
+    cid = db.Column(db.Integer, db.ForeignKey('City.id'), primary_key=True)
