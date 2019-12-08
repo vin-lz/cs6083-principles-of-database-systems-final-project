@@ -58,9 +58,15 @@ def friendship():
 @follow.route('/friends', methods=['POST'])
 @login_required
 def friendship_post():
-    if request.form.get('friend-email'):
-        to_add = request.form.get('friend-email')
-        new_follow(to_add)
+    # Add new friend
+    if request.form.get('add-new'):
+        if not request.form.get('friend-email'):
+            flash('Your need an email to follow a user.')
+        else:
+            to_add = request.form.get('friend-email')
+            print(to_add, 'friend')
+            new_follow(to_add, 'friend')
+            return redirect(url_for('follow.friendship'))
 
     follower = request.form.get('follower')
     followee = request.form.get('followee')
@@ -119,6 +125,16 @@ def neighbor():
 @follow.route('/neighbors', methods=['POST'])
 @login_required
 def neighbor_post():
+    # Add new neighbor
+    if request.form.get('add-new'):
+        if not request.form.get('neighbor-email'):
+            flash('Your need an email to follow a user.')
+        else:
+            to_add = request.form.get('neighbor-email')
+            print(to_add, 'neighbor')
+            new_follow(to_add, 'neighbor')
+            return redirect(url_for('follow.neighbor'))
+
     acceptor = request.form.get('neighbor')
     action = request.form.get('action')
     if action == 'Unfollow':
@@ -131,6 +147,35 @@ def neighbor_post():
     return redirect(url_for('follow.neighbor'))
 
 @login_required
-def new_follow(category):
-    print("Yes!!!")
-    return redirect(url_for('main.index'))
+def new_follow(email, category):
+    print(email, category)
+    if category == 'friend':
+        followee = Users.query.filter_by(email=email).first()
+        print(followee)
+        if followee:
+            if not Friendship.query.filter_by(follower=current_user.id, followee=followee.id).first() and not Friendship.query.filter_by(follower=followee.id, followee=current_user.id).first():
+                
+                new_friendship = Friendship(follower=current_user.id, followee=followee.id, ftimestamp=datetime.now(), fstatus='pending')
+                db.session.add(new_friendship)
+                db.session.commit()
+                flash('An invitation has been sent.')
+            else:
+                flash('Already in your friend list.')
+        else:
+            flash('Can\'t find this user in the system.')
+    elif category == 'neighbor':
+        followee = Users.query.filter_by(email=email).first()
+        print(followee)
+        if followee:
+            if not Neighboring.query.filter_by(initiator=current_user.id, acceptor=followee.id).first():
+                
+                new_neighbor = Neighboring(initiator=current_user.id, acceptor=followee.id, ntimestamp=datetime.now())
+                db.session.add(new_neighbor)
+                db.session.commit()
+                flash('A neighbor is added.')
+            else:
+                flash('Already in your neighbor list.')
+        else:
+            flash('Can\'t find this user in the system.')
+
+    return

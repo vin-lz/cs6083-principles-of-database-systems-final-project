@@ -32,7 +32,16 @@
             {% endfor %}
         </ul>
         {% endif %}
-        <a class="button is-info">Follow a Neighbor</a>
+        <form method="POST" action="/neighbors">
+            <div class="field has-addons has-addons-centered">
+                <div class="control">
+                    <input class="input" type="email" name="neighbor-email" placeholder="Your neighbor's email">
+                </div>
+                <div class="control">
+                    <button class="button is-info" name="add-new" value="True">Follow a neighbor</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

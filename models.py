@@ -8,6 +8,7 @@ from datetime import datetime
 
 
 class Users(UserMixin, db.Model):
+    __tablename__ = 'Users'
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(45), unique=True, nullable=False)
     pword = db.Column(db.String(45), nullable=False)
@@ -21,12 +22,14 @@ class Users(UserMixin, db.Model):
 
 
 class City(db.Model):
+    __tablename__ = 'City'
     id = db.Column(db.Integer, primary_key=True)
     cname = db.Column(db.String(45), nullable=False)
     cstate = db.Column(db.String(45), nullable=False)
 
 
 class Friendship(db.Model):
+    __tablename__ = 'Friendship'
     follower = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
     followee = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
     ftimestamp = db.Column(db.DateTime, default=datetime.now())
@@ -34,12 +37,14 @@ class Friendship(db.Model):
 
 
 class Neighboring(db.Model):
+    __tablename__ = 'Neighboring'
     initiator = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
     acceptor = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
     ntimestamp = db.Column(db.DateTime, default=datetime.now())
 
 
 class Hood(db.Model):
+    __tablename__ = 'Hodd'
     id = db.Column(db.Integer, primary_key=True)
     hname = db.Column(db.String(45), nullable=False)
     sw_lat = db.Column(db.Float, nullable=False)
@@ -50,6 +55,7 @@ class Hood(db.Model):
 
 
 class Blocks(db.Model):
+    __tablename__ = 'Blocks'
     id = db.Column(db.Integer, primary_key=True)
     bname = db.Column(db.String(45), nullable=False)
     sw_lat = db.Column(db.Float, nullable=False)
@@ -60,6 +66,7 @@ class Blocks(db.Model):
 
 
 class Location(db.Model):
+    __tablename__ = 'Location'
     bid = db.Column(db.Integer, primary_key=True)
     hid = db.Column(db.Integer, db.ForeignKey('Hood.id'), primary_key=True)
     cid = db.Column(db.Integer, db.ForeignKey('City.id'), primary_key=True)
