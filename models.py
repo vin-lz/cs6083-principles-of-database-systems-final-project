@@ -16,7 +16,7 @@ class Users(UserMixin, db.Model):
     street_addr = db.Column(db.String(45), nullable=False)
     cid = db.Column(db.String(45), db.ForeignKey('City.id'), nullable=False)
     uprofile = db.Column(db.Text)
-    photo = db.Column(db.String(45))
+    photo = db.Column(db.Text)
     last_login_timestamp = db.Column(db.DateTime, default=datetime.now())
 
 
