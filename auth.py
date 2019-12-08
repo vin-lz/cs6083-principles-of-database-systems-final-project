@@ -5,11 +5,11 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # ------------------------------------------------------------------------------
 from flask_login import login_user, logout_user, login_required, current_user
 # ------------------------------------------------------------------------------
-from datetime import datetime
-# ------------------------------------------------------------------------------
 from . import db
 from .models import Users
 from .models import City
+# ------------------------------------------------------------------------------
+from datetime import datetime
 # ------------------------------------------------------------------------------
 
 auth = Blueprint('auth', __name__)
@@ -72,7 +72,8 @@ def signup_post():
             flash('Passwords do not match')
             return redirect(url_for('auth.signup'))
         else:
-            city = City.query.filter_by(cname=city_name, cstate=city_state).first()
+            city = City.query.filter_by(
+                cname=city_name, cstate=city_state).first()
             # City found
             if city:
                 city_id = city.id
@@ -82,12 +83,12 @@ def signup_post():
                 db.session.add(new_city)
                 db.session.commit()
                 city_id = City.query.filter_by(
-                cname=city_name, cstate=city_state).first().id
+                    cname=city_name, cstate=city_state).first().id
 
             new_user = Users(email=email, fname=first_name, lname=last_name, pword=generate_password_hash(
-            new_password, method='sha256'), street_addr=street_address, cid=city_id, last_login_timestamp=datetime.now())
+                new_password, method='sha256'), street_addr=street_address, cid=city_id, last_login_timestamp=datetime.now())
 
-                # add the new user to the database
+            # add the new user to the database
             db.session.add(new_user)
             db.session.commit()
         # Successful!
@@ -97,17 +98,20 @@ def signup_post():
         flash('Missing mandatory infomation')
         return redirect(url_for('auth.signup'))
 
+
 @auth.route('/account')
 @login_required
 def account():
     return render_template('account.html', user=current_user)
 
+
 @auth.route('/account', methods=['POST'])
 @login_required
 def account_post():
     street_address = request.form.get('street-address')
-    if street_address and street_address.replace(' ',''):
-        Users.query.filter_by(id=current_user.id).first().street_addr=street_address
+    if street_address and street_address.replace(' ', ''):
+        Users.query.filter_by(
+            id=current_user.id).first().street_addr = street_address
         db.session.commit()
     else:
         flash('Street cannot be empty')
@@ -121,14 +125,16 @@ def account_post():
     new_password = request.form.get('new-password')
     confirm_password = request.form.get('confirm-password')
     if new_password or confirm_password:
-        if new_password==confirm_password:
-            Users.query.filter_by(id=current_user.id).first().pword = generate_password_hash(new_password, method='sha256')
+        if new_password == confirm_password:
+            Users.query.filter_by(id=current_user.id).first(
+            ).pword = generate_password_hash(new_password, method='sha256')
             db.session.commit()
         else:
             flash('Passwords do not match')
             return redirect(url_for('auth.account'))
     flash('Save successfully')
     return redirect(url_for('auth.account'))
+
 
 @auth.route('/logout')
 @login_required

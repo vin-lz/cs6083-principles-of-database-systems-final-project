@@ -3,44 +3,67 @@
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Project</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" />
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 </head>
 
 <body>
     <section class="hero is-primary is-fullheight">
-
         <div class="hero-head">
-            <nav class="navbar">
-                <div class="container">
+            <nav class="navbar has-background-dark" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                        data-target="navbarBasicExample">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
 
-                    <div id="navbarMenuHeroA" class="navbar-menu">
-                        <div class="navbar-end">
-                            <a href="{{ url_for('main.index') }}" class="navbar-item">
-                                Home
+                <div id="navbarMenuHeroA" class="navbar-menu ">
+                    <div class="navbar-start">
+                        <a href="{{ url_for('main.index') }}" class="navbar-item">
+                            Home
+                        </a>
+
+                        {% if current_user.is_authenticated %}
+                        <div class="navbar-item has-dropdown is-hoverable has-text-white has-background-dark">
+                            <a class="navbar-link has-background-dark">
+                                Follow
                             </a>
-                            {% if current_user.is_authenticated %}
-                            <a href="{{ url_for('auth.account') }}" class="navbar-item">
-                                Account
-                            </a>
-                            {% endif %}
-                            {% if not current_user.is_authenticated %}
-                            <a href="{{ url_for('auth.login') }}" class="navbar-item">
-                                Login
-                            </a>
-                            <a href="{{ url_for('auth.signup') }}" class="navbar-item">
-                                Sign Up
-                            </a>
-                            {% endif %}
-                            {% if current_user.is_authenticated %}
-                            <a href="{{ url_for('auth.logout') }}" class="navbar-item">
-                                Logout
-                            </a>
-                            {% endif %}
-                            </a>
+
+                            <div class="navbar-dropdown has-background-dark">
+                                <a class="navbar-item has-text-white" href="{{ url_for('follow.friendship') }}">
+                                    Friends
+                                </a>
+                                <a class="navbar-item has-text-white" href="{{ url_for('follow.neighbor') }}">
+                                    Neighbors
+                                </a>
+                            </div>
                         </div>
+                        {% endif %}
+
+                        {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('auth.account') }}" class="navbar-item">
+                            Account
+                        </a>
+                        {% endif %}
+                        {% if not current_user.is_authenticated %}
+                        <a href="{{ url_for('auth.login') }}" class="navbar-item">
+                            Login
+                        </a>
+                        <a href="{{ url_for('auth.signup') }}" class="navbar-item">
+                            Sign Up
+                        </a>
+                        {% endif %}
+                        {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('auth.logout') }}" class="navbar-item">
+                            Logout
+                        </a>
+                        {% endif %}
+                        </a>
                     </div>
                 </div>
             </nav>

@@ -1,14 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="column is-4 is-offset-4">
+<div class="column is-6 is-offset-3">
     <h3 class="title">Friend List</h3>
-    <!-- <h2 class="subtitle">
-        <form method="POST" action="/follow">
-            <input class="button is-primary is-inverted" type="submit" name="category" value="Friends">
-            <input class="button is-primary is-inverted" type="submit" name="category" value="Neighbors">
-        </form>
-    </h2> -->
     <div class="box">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -25,14 +19,13 @@
             <li>
                 <form method="POST" action="/friends">
                     <div class="field level">
-                        <label class="level-left">{{i[0].fname}} {{i[0].lname}} </label>
+                        <label class="label level-left is-medium">{{i[0].fname}} {{i[0].lname}} </label>
                         <div class="control">
                             <input type="hidden" name="follower" value="{{ i[1].follower }}">
                             <input type="hidden" name="followee" value="{{ i[1].followee }}">
-                            <!-- <input type="hidden" name="category" value="Friends"> -->
-                            <input class="button is-small is-primary is-outlined" type="submit" name="action"
+                            <input class="button is-primary is-outlined" type="submit" name="action"
                                 value="Accept">
-                            <input class="button is-small is-primary is-outlined" type="submit" name="action"
+                            <input class="button is-primary is-outlined" type="submit" name="action"
                                 value="Reject">
                         </div>
                     </div>
@@ -52,12 +45,12 @@
             <li>
                 <form method="POST" action="/friends">
                     <div class="field level">
-                        <label class="level-left">{{i[0].fname}} {{i[0].lname}} </label>
+                        <label class="label level-left is-medium">{{i[0].fname}} {{i[0].lname}} </label>
                         <div class="control">
                             <input type="hidden" name="follower" value="{{ i[1].follower }}">
                             <input type="hidden" name="followee" value="{{ i[1].followee }}">
                             <!-- <input type="hidden" name="category" value="Friends"> -->
-                            <input class="button is-small is-primary is-outlined" type="submit" name="action"
+                            <input class="button is-primary is-outlined" type="submit" name="action"
                                 value="Unfollow">
                         </div>
                     </div>

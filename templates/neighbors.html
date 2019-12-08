@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="column is-4 is-offset-4">
+<div class="column is-6 is-offset-3">
     <h3 class="title">Neighbor List</h3>
     <div class="box">
         {% with messages = get_flashed_messages() %}
@@ -12,19 +12,18 @@
         {% endif %}
         {% endwith %}
         {% if neighbor_count == 0 %}
-        <h3 class="subtitle  is-4 has-text-primary">It's empty</h3>
+        <h3 class="subtitle is-4 has-text-primary">It's empty</h3>
         {% else %}
-        <h3 class="subtitle  is-4 has-text-primary">Neighbors</h3>
+        <h3 class="subtitle is-4 has-text-primary">Neighbors</h3>
         <ul>
             {% for i in users_neighboring %}
             <li>
                 <form method="POST" action="/neighbors">
                     <div class="field level">
-                        <label class="level-left">{{i[0].fname}} {{i[0].lname}}</label>
+                        <label class="label level-left is-medium">{{i[0].fname}} {{i[0].lname}}</label>
                         <div class="control">
                             <input type="hidden" name="neighbor" value="{{ i[1].acceptor }}">
-                            <!-- <input type="hidden" name="category" value="Friends"> -->
-                            <input class="button is-small is-primary is-outlined" type="submit" name="action"
+                            <input class="button is-primary is-outlined" type="submit" name="action"
                                 value="Unfollow">
                         </div>
                     </div>

@@ -2,14 +2,24 @@
     "python.pythonPath": "venv/bin/python3",
     "cSpell.words": [
         "cname",
+        "endblock",
         "fname",
         "followee",
         "fstatus",
         "ftimestamp",
+        "fullheight",
+        "fullwidth",
+        "hname",
+        "hoverable",
+        "hpopulation",
         "lname",
         "ntimestamp",
         "pword",
+        "signup",
+        "sqlite",
         "unfollow",
-        "uprofile"
+        "unfollowed",
+        "uprofile",
+        "werkzeug"
     ]
 }

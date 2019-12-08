@@ -6,6 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 # ------------------------------------------------------------------------------
 import logging
+# ------------------------------------------------------------------------------
 
 # logging.basicConfig()
 # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
@@ -19,6 +20,7 @@ def create_app():
     app.config['SECRET_KEY'] = 'cloudsmile'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
     app.debug = True
+
     db.init_app(app)
 
     login_manager = LoginManager()
