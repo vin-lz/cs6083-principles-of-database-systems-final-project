@@ -13,7 +13,7 @@
         {% endwith %}
         <ul>
             {% if pending_count != 0 %}
-            <h3 class="subtitle  is-4 has-text-primary">Pending friendship</h3>
+            <h3 class="subtitle is-4 has-text-primary">Pending friendship</h3>
             {% for i in users_friendship %}
             {% if i[1].fstatus=='pending' %}
             <li>
@@ -23,10 +23,8 @@
                         <div class="control">
                             <input type="hidden" name="follower" value="{{ i[1].follower }}">
                             <input type="hidden" name="followee" value="{{ i[1].followee }}">
-                            <input class="button is-primary is-outlined" type="submit" name="action"
-                                value="Accept">
-                            <input class="button is-primary is-outlined" type="submit" name="action"
-                                value="Reject">
+                            <input class="button is-primary is-outlined" type="submit" name="action" value="Accept">
+                            <input class="button is-primary is-outlined" type="submit" name="action" value="Reject">
                         </div>
                     </div>
                 </form>
@@ -50,8 +48,7 @@
                             <input type="hidden" name="follower" value="{{ i[1].follower }}">
                             <input type="hidden" name="followee" value="{{ i[1].followee }}">
                             <!-- <input type="hidden" name="category" value="Friends"> -->
-                            <input class="button is-primary is-outlined" type="submit" name="action"
-                                value="Unfollow">
+                            <input class="button is-primary is-outlined" type="submit" name="action" value="Unfollow">
                         </div>
                     </div>
                 </form>
@@ -60,6 +57,16 @@
             {% endfor %}
         </ul>
         {% endif %}
+        <form method="POST" action="/friends">
+            <div class="field has-addons has-addons-centered">
+                <div class="control">
+                    <input class="input" type="email" name="friend-email" placeholder="Your friend's email">
+                </div>
+                <div class="control">
+                    <button class="button is-info">Follow a friend</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

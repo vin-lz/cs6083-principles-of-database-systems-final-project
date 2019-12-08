@@ -58,11 +58,15 @@ def friendship():
 @follow.route('/friends', methods=['POST'])
 @login_required
 def friendship_post():
+    if request.form.get('friend-email'):
+        to_add = request.form.get('friend-email')
+        new_follow(to_add)
+
     follower = request.form.get('follower')
     followee = request.form.get('followee')
     action = request.form.get('action')
-    print('-------------')
-    print(action)
+    # print('-------------')
+    # print(action)
     if action == 'Unfollow':
         db.session.delete(Friendship.query.filter_by(
             follower=follower, followee=followee).first())
@@ -125,3 +129,8 @@ def neighbor_post():
             id=acceptor).first().fname, Users.query.filter_by(id=acceptor).first().lname))
 
     return redirect(url_for('follow.neighbor'))
+
+@login_required
+def new_follow(category):
+    print("Yes!!!")
+    return redirect(url_for('main.index'))

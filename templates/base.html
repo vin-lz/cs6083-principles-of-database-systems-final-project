@@ -21,9 +21,15 @@
                         <span aria-hidden="true"></span>
                     </a>
                 </div>
-
+                {% if current_user.is_authenticated %}
+                <div class="navbar-start">
+                    <p class="navbar-item">
+                        Welcome back, {{ current_user.fname }} {{ current_user.lname }}!
+                    </p>
+                </div>
+                {% endif %}
                 <div id="navbarMenuHeroA" class="navbar-menu ">
-                    <div class="navbar-start">
+                    <div class="navbar-end">
                         <a href="{{ url_for('main.index') }}" class="navbar-item">
                             Home
                         </a>
@@ -65,6 +71,7 @@
                         {% endif %}
                         </a>
                     </div>
+
                 </div>
             </nav>
         </div>
