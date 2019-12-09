@@ -28,7 +28,7 @@
                     <td>{{ my_blocks_hood[0].bname }}</td>
                     <td>{{ my_blocks_hood[1].hname }}</td>
                     <td>
-                        Joined
+                        {{ status }}
                     </td>
                 </tr>
                 {% endif %}
@@ -39,6 +39,7 @@
                     <td>
                         <form method="POST" action="/blocks">
                             <div class="control">
+                                <input type="hidden" name="to-join" value="{{ i[0].id }}">
                                 <input class="button is-primary is-outlined" type="submit" name="action" value="Join">
                             </div>
                         </form>
