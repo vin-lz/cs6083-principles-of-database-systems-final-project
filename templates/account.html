@@ -44,6 +44,17 @@
                 </div>
             </div>
 
+            <label class="label level-left">Block</label>
+            <div class="field level">
+                <p class="has-text-left">{{ block }}</p>
+                <div class="control">
+                    <a class="button is-info" href="{{ url_for('location.blocks') }}">Change</a>
+                </div>
+            </div>
+
+            <label class="label has-text-left">City</label>
+            <p class="has-text-left">{{ city.cname }}, {{ city.cstate }}</p>
+
             <div class="field">
                 <label class="label has-text-left">Profile</label>
                 <div class="control">

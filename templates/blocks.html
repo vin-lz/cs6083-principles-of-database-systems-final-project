@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-6 is-offset-3">
+    <h1 class="title">
+        Blocks in Your City
+    </h1>
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="notification is-danger">
+            {{ messages[0] }}.
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Block</th>
+                    <th>Hood</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if my_blocks_hood != None %}
+                <tr>
+                    <td>{{ my_blocks_hood[0].bname }}</td>
+                    <td>{{ my_blocks_hood[1].hname }}</td>
+                    <td>
+                        Joined
+                    </td>
+                </tr>
+                {% endif %}
+                {% for i in blocks_hood %}
+                <tr>
+                    <td>{{ i[0].bname }}</td>
+                    <td>{{ i[1].hname }}</td>
+                    <td>
+                        <form method="POST" action="/blocks">
+                            <div class="control">
+                                <input class="button is-primary is-outlined" type="submit" name="action" value="Join">
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock %}

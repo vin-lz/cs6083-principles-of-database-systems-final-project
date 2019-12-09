@@ -52,10 +52,11 @@
                         {% endif %}
 
                         {% if current_user.is_authenticated %}
-                        <a href="{{ url_for('auth.account') }}" class="navbar-item">
+                        <a href="{{ url_for('acc.account') }}" class="navbar-item">
                             Account
                         </a>
                         {% endif %}
+
                         {% if not current_user.is_authenticated %}
                         <a href="{{ url_for('auth.login') }}" class="navbar-item">
                             Login
@@ -64,14 +65,13 @@
                             Sign Up
                         </a>
                         {% endif %}
+
                         {% if current_user.is_authenticated %}
                         <a href="{{ url_for('auth.logout') }}" class="navbar-item">
                             Logout
                         </a>
                         {% endif %}
-                        </a>
                     </div>
-
                 </div>
             </nav>
         </div>

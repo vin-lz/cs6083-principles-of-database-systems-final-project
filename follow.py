@@ -146,6 +146,7 @@ def neighbor_post():
 
     return redirect(url_for('follow.neighbor'))
 
+
 @login_required
 def new_follow(email, category):
     print(email, category)

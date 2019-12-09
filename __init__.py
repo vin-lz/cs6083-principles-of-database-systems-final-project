@@ -36,12 +36,18 @@ def create_app():
 
     # blueprint for auth routes in our app
     from .auth import auth as auth_blueprint
+    from .follow import follow as follow_blueprint
+    from .location import location as location_blueprint
+    from .account import acc as account_blueprint
     app.register_blueprint(auth_blueprint)
+    app.register_blueprint(follow_blueprint)
+    app.register_blueprint(location_blueprint)
+    app.register_blueprint(account_blueprint)
 
     # blueprint for non-auth parts of app
     from .main import main as main_blueprint
-    from .follow import follow as follow_blueprint
     app.register_blueprint(main_blueprint)
-    app.register_blueprint(follow_blueprint)
+
+
 
     return app

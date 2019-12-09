@@ -99,43 +99,6 @@ def signup_post():
         return redirect(url_for('auth.signup'))
 
 
-@auth.route('/account')
-@login_required
-def account():
-    return render_template('account.html', user=current_user)
-
-
-@auth.route('/account', methods=['POST'])
-@login_required
-def account_post():
-    street_address = request.form.get('street-address')
-    if street_address and street_address.replace(' ', ''):
-        Users.query.filter_by(
-            id=current_user.id).first().street_addr = street_address
-        db.session.commit()
-    else:
-        flash('Street cannot be empty')
-        return redirect(url_for('auth.account'))
-
-    profile = request.form.get('profile')
-    if profile != current_user.uprofile and profile:
-        Users.query.filter_by(id=current_user.id).first().uprofile = profile
-        db.session.commit()
-
-    new_password = request.form.get('new-password')
-    confirm_password = request.form.get('confirm-password')
-    if new_password or confirm_password:
-        if new_password == confirm_password:
-            Users.query.filter_by(id=current_user.id).first(
-            ).pword = generate_password_hash(new_password, method='sha256')
-            db.session.commit()
-        else:
-            flash('Passwords do not match')
-            return redirect(url_for('auth.account'))
-    flash('Save successfully')
-    return redirect(url_for('auth.account'))
-
-
 @auth.route('/logout')
 @login_required
 def logout():

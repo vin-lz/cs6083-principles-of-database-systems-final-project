@@ -4,6 +4,7 @@
         "bname",
         "bpopulation",
         "cname",
+        "cstate",
         "endblock",
         "fname",
         "followee",
