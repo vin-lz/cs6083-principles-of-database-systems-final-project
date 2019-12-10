@@ -18,6 +18,7 @@ from .models import Approval
 
 location = Blueprint('location', __name__)
 
+
 @location.route('/blocks')
 @login_required
 def blocks():
@@ -38,10 +39,12 @@ def blocks():
         # Find all [blocks, hood] ids (exclude the one you're in) in your city
         blocks_hood_list = []
         for i in blocks_hood_id_list:
-            blocks_hood_list.append([Blocks.query.filter_by(id=i[0]).first(), Hood.query.filter_by(id=i[1]).first()])
+            blocks_hood_list.append([Blocks.query.filter_by(
+                id=i[0]).first(), Hood.query.filter_by(id=i[1]).first()])
         # Your own [block, hood]
         my_blocks_hood_id = [my_block_id, my_hood_id]
-        my_blocks_hood = [Blocks.query.filter_by(id=my_blocks_hood_id[0]).first(), Hood.query.filter_by(id=my_blocks_hood_id[1]).first()]
+        my_blocks_hood = [Blocks.query.filter_by(id=my_blocks_hood_id[0]).first(
+        ), Hood.query.filter_by(id=my_blocks_hood_id[1]).first()]
 
         return render_template('blocks.html', status=status, my_blocks_hood=my_blocks_hood, blocks_hood=blocks_hood_list)
     else:
@@ -52,7 +55,8 @@ def blocks():
         blocks_hood_list = []
         # Find all [blocks, hood] ids in your city
         for i in blocks_hood_id_list:
-            blocks_hood_list.append([Blocks.query.filter_by(id=i[0]).first(), Hood.query.filter_by(id=i[1]).first()])
+            blocks_hood_list.append([Blocks.query.filter_by(
+                id=i[0]).first(), Hood.query.filter_by(id=i[1]).first()])
         return render_template('blocks.html', blocks_hood=blocks_hood_list)
 
 
@@ -63,11 +67,14 @@ def join_block():
     if get_my_membership():
         db.session.delete(get_my_membership())
         db.session.commit()
-    db.session.add(Membership(uid=current_user.id, bid=to_join_block_id, approval_count=0))
+    db.session.add(Membership(uid=current_user.id,
+                              bid=to_join_block_id, approval_count=0))
     db.session.commit()
-    flash('You are joining %s. Membership is pending approval' % Blocks.query.filter_by(id=to_join_block_id).first().bname)
-    
+    flash('You are joining %s. Membership is pending approval' %
+          Blocks.query.filter_by(id=to_join_block_id).first().bname)
+
     return redirect(url_for('location.blocks'))
+
 
 @login_required
 def get_my_membership():
@@ -84,13 +91,15 @@ def block_members():
             my_block_id = get_my_membership().bid
 
             # Get pending members to approve:
-            pending = Membership.query.filter(Membership.bid==my_block_id, Membership.approval_count>-1).all()
+            pending = Membership.query.filter(
+                Membership.bid == my_block_id, Membership.approval_count > -1).all()
             pending_count = len(pending)
             print('-------------------')
             print(pending)
             print(pending_count)
             # Remove those already approved by you
-            approved_by_you = Approval.query.filter_by(approver=current_user.id, bid=my_block_id).all()
+            approved_by_you = Approval.query.filter_by(
+                approver=current_user.id, bid=my_block_id).all()
             approved_by_you_uid_list = []
             if approved_by_you:
                 for i in approved_by_you:
@@ -99,10 +108,12 @@ def block_members():
             pending_users_membership = []
             for i in pending:
                 if i.uid not in approved_by_you_uid_list:
-                    pending_users_membership.append([Users.query.filter_by(id=i.uid).first(), i])
+                    pending_users_membership.append(
+                        [Users.query.filter_by(id=i.uid).first(), i])
 
             # Get approved members
-            approved = Membership.query.filter(Membership.bid==my_block_id, Membership.approval_count<0).all()
+            approved = Membership.query.filter(
+                Membership.bid == my_block_id, Membership.approval_count < 0).all()
             approved_count = len(approved)
             print('-------------------')
             print(approved)
@@ -111,7 +122,8 @@ def block_members():
             # Convert them to [Users, Membership] pair
             approved_users_membership = []
             for i in approved:
-                approved_users_membership.append([Users.query.filter_by(id=i.uid).first(), i])
+                approved_users_membership.append(
+                    [Users.query.filter_by(id=i.uid).first(), i])
 
         elif my_membership.approval_count > -1:
             return render_template('block-members.html', status='Pending')
@@ -125,15 +137,17 @@ def block_members():
 @login_required
 def block_members_post():
     if request.form.get('action') == 'Approve' and request.form.get('uid') and request.form.get('bid'):
-        membership = Membership.query.filter_by(uid=request.form.get('uid'), bid=request.form.get('bid')).first()
+        membership = Membership.query.filter_by(
+            uid=request.form.get('uid'), bid=request.form.get('bid')).first()
         if membership.approval_count != -1:
-        # Approve or not based on block population
+            # Approve or not based on block population
             membership.approval_count += 1
-            db.session.add(Approval(approver=current_user.id, approvee=request.form.get('uid'), bid=request.form.get('bid')))
+            db.session.add(Approval(approver=current_user.id, approvee=request.form.get(
+                'uid'), bid=request.form.get('bid')))
             db.session.commit()
             flash('You have approved this user to join your block')
             if membership.approval_count >= 3 or membership.approval_count == Blocks.query.filter_by(id=request.form.get('bid')).first().bpopulation:
                 membership.approval_count = -1
                 db.session.commit()
-    
+
     return redirect(url_for('location.block_members'))

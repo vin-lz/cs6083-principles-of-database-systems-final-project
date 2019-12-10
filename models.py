@@ -30,16 +30,20 @@ class City(db.Model):
 
 class Friendship(db.Model):
     __tablename__ = 'Friendship'
-    follower = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
-    followee = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
+    follower = db.Column(db.Integer, db.ForeignKey(
+        'Users.id'), primary_key=True)
+    followee = db.Column(db.Integer, db.ForeignKey(
+        'Users.id'), primary_key=True)
     ftimestamp = db.Column(db.DateTime, default=datetime.now())
     fstatus = db.Column(db.String(45), default='pending')
 
 
 class Neighboring(db.Model):
     __tablename__ = 'Neighboring'
-    initiator = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
-    acceptor = db.Column(db.Integer, db.ForeignKey('Users.id'), primary_key=True)
+    initiator = db.Column(db.Integer, db.ForeignKey(
+        'Users.id'), primary_key=True)
+    acceptor = db.Column(db.Integer, db.ForeignKey(
+        'Users.id'), primary_key=True)
     ntimestamp = db.Column(db.DateTime, default=datetime.now())
 
 
@@ -74,13 +78,17 @@ class Location(db.Model):
 
 class Membership(db.Model):
     __tablename__ = 'Membership'
-    uid = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=False, primary_key=True)
-    bid = db.Column(db.Integer, db.ForeignKey('Blocks.id'), nullable=False, primary_key=True)
+    uid = db.Column(db.Integer, db.ForeignKey('Users.id'),
+                    nullable=False, primary_key=True)
+    bid = db.Column(db.Integer, db.ForeignKey('Blocks.id'),
+                    nullable=False, primary_key=True)
     approval_count = db.Column(db.Integer, nullable=False, default=0)
 
 
 class Approval(db.Model):
     __tablename__ = 'Approval'
-    approver = db.Column(db.Integer, db.ForeignKey('Users.id'),primary_key=True)
-    approvee = db.Column(db.Integer, db.ForeignKey('Membership.uid'), primary_key=True)
+    approver = db.Column(db.Integer, db.ForeignKey(
+        'Users.id'), primary_key=True)
+    approvee = db.Column(db.Integer, db.ForeignKey(
+        'Membership.uid'), primary_key=True)
     bid = db.Column(db.Integer, db.ForeignKey('Blocks.id'), primary_key=True)

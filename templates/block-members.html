@@ -23,7 +23,7 @@
         {% endif %}
         {% endwith %}
 
-        
+
         {% if pending_count != 0 %}
         <table class="table is-fullwidth">
             <thead>
@@ -41,7 +41,8 @@
                             <div class="control has-text-right">
                                 <input type="hidden" name="uid" value="{{ i[1].uid }}">
                                 <input type="hidden" name="bid" value="{{ i[1].bid }}">
-                                <input class="button is-primary is-outlined" type="submit" name="action" value="Approve">
+                                <input class="button is-primary is-outlined" type="submit" name="action"
+                                    value="Approve">
                             </div>
                         </form>
                     </td>
@@ -51,7 +52,7 @@
         </table>
         {% endif %}
 
-        
+
         {% if approved_count == 0 %}
         <h3 class="subtitle  is-4 has-text-primary">You're the only user in your block.</h3>
         {% else %}
