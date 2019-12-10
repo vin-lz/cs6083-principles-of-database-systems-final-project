@@ -14,24 +14,32 @@
         {% if neighbor_count == 0 %}
         <h3 class="subtitle is-4 has-text-primary">It's empty</h3>
         {% else %}
-        <h3 class="subtitle is-4 has-text-primary">Neighbors</h3>
-        <ul>
-            {% for i in users_neighboring %}
-            <li>
-                <form method="POST" action="/neighbors">
-                    <div class="field level">
-                        <label class="label level-left is-medium">{{i[0].fname}} {{i[0].lname}}</label>
-                        <div class="control">
-                            <input type="hidden" name="neighbor" value="{{ i[1].acceptor }}">
-                            <input class="button is-primary is-outlined" type="submit" name="action"
-                                value="Unfollow">
-                        </div>
-                    </div>
-                </form>
-            </li>
-            {% endfor %}
-        </ul>
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Neighbors</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in users_neighboring %}
+                <tr>
+                    <td>{{ i[0].fname }} {{ i[0].lname }}</td>
+                    <td>
+                        <form method="POST" action="/neighbors">
+                            <div class="control has-text-right">
+                                <input type="hidden" name="neighbor" value="{{ i[1].acceptor }}">
+                                <input class="button is-primary is-outlined" type="submit" name="action"
+                                    value="Unfollow">
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
         {% endif %}
+
         <form method="POST" action="/neighbors">
             <div class="field has-addons has-addons-centered">
                 <div class="control">
