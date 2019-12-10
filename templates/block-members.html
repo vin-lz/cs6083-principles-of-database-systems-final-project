@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-6 is-offset-3">
+    {% if status == 'Pending' %}
+    <h1 class="title">
+        Your membership is still pending.
+    </h1>
+    {% elif status == 'Not' %}
+    <h1 class="title">
+        You aren't a member of this block.
+    </h1>
+    {% else %}
+    <h1 class="title">
+        Block Members
+    </h1>
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="notification is-danger">
+            {{ messages[0] }}.
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        
+        {% if pending_count != 0 %}
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Pending Members</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in pending_users_membership %}
+                <tr>
+                    <td>{{ i[0].fname }} {{ i[0].lname }}</td>
+                    <td>
+                        <form method="POST" action="">
+                            <div class="control has-text-right">
+                                <input type="hidden" name="uid" value="{{ i[1].uid }}">
+                                <input type="hidden" name="bid" value="{{ i[1].bid }}">
+                                <input class="button is-primary is-outlined" type="submit" name="action" value="Approve">
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+
+        
+        {% if approved_count == 0 %}
+        <h3 class="subtitle  is-4 has-text-primary">You're the only user in your block.</h3>
+        {% else %}
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Members</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in approved_users_membership %}
+                <tr>
+                    <td>{{ i[0].fname }} {{ i[0].lname }}</td>
+                    <td>
+                        <!-- <form method="POST" action="">
+                            <div class="control">
+                                <input type="hidden" name="to-join" value="{{ i.uid }}">
+                                <input class="button is-primary is-outlined" type="submit" name="action" value="Join">
+                            </div>
+                        </form> -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

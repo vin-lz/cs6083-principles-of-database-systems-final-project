@@ -1,6 +1,7 @@
 {
     "python.pythonPath": "venv/bin/python3",
     "cSpell.words": [
+        "approvee",
         "bname",
         "bpopulation",
         "cname",
@@ -17,6 +18,7 @@
         "hpopulation",
         "lname",
         "ntimestamp",
+        "pendings",
         "pword",
         "signup",
         "sqlite",

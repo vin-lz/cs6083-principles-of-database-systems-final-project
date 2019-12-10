@@ -71,8 +71,16 @@ class Location(db.Model):
     hid = db.Column(db.Integer, db.ForeignKey('Hood.id'), primary_key=True)
     cid = db.Column(db.Integer, db.ForeignKey('City.id'), primary_key=True)
 
+
 class Membership(db.Model):
     __tablename__ = 'Membership'
     uid = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=False, primary_key=True)
     bid = db.Column(db.Integer, db.ForeignKey('Blocks.id'), nullable=False, primary_key=True)
     approval_count = db.Column(db.Integer, nullable=False, default=0)
+
+
+class Approval(db.Model):
+    __tablename__ = 'Approval'
+    approver = db.Column(db.Integer, db.ForeignKey('Users.id'),primary_key=True)
+    approvee = db.Column(db.Integer, db.ForeignKey('Membership.uid'), primary_key=True)
+    bid = db.Column(db.Integer, db.ForeignKey('Blocks.id'), primary_key=True)
