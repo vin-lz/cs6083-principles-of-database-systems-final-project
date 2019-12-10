@@ -37,7 +37,7 @@
                 <tr>
                     <td>{{ i[0].fname }} {{ i[0].lname }}</td>
                     <td>
-                        <form method="POST" action="">
+                        <form method="POST" action="/block-members">
                             <div class="control has-text-right">
                                 <input type="hidden" name="uid" value="{{ i[1].uid }}">
                                 <input type="hidden" name="bid" value="{{ i[1].bid }}">
@@ -67,14 +67,7 @@
                 {% for i in approved_users_membership %}
                 <tr>
                     <td>{{ i[0].fname }} {{ i[0].lname }}</td>
-                    <td>
-                        <!-- <form method="POST" action="">
-                            <div class="control">
-                                <input type="hidden" name="to-join" value="{{ i.uid }}">
-                                <input class="button is-primary is-outlined" type="submit" name="action" value="Join">
-                            </div>
-                        </form> -->
-                    </td>
+                    <td></td>
                 </tr>
                 {% endfor %}
             </tbody>
