@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="column is-6 is-offset-3">
+<div class="column is-8 is-offset-2">
     <h3 class="title">{{ message_info.message.title }}</h3>
     <div class="box">
         {% with messages = get_flashed_messages() %}
@@ -24,7 +24,8 @@
         {% if reply_list != None %}
         <hr class="is-divider">
         {% for i in reply_info_list %}
-        <p class="has-text-left">Reply: <br />
+        <p class="has-text-left">
+            <label class="label">Reply:</label>
             <br>
             {{ i.reply.content }}</p>
         <br>

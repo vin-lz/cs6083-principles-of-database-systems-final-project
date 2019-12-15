@@ -48,7 +48,7 @@ def load_thread(scope='all', status='all'):
             author = Users.query.filter_by(id=message.author).first()
             in_scope_thread_message_list.append([i, message, author])
             count += 1
-        return render_template('timeline.html', message_count=count, thread_message_list=in_scope_thread_message_list)
+        return render_template('timeline.html', message_count=count, thread_message_list=in_scope_thread_message_list, scope=scope, status=status)
 
     # Filter to find those meeting the scope
     for i in thread_list:
@@ -69,7 +69,7 @@ def load_thread(scope='all', status='all'):
     print('----unread_in_scope_thread_message_list----')
     print(in_scope_thread_message_list)
 
-    return render_template('timeline.html', message_count=count, thread_message_list=in_scope_thread_message_list)
+    return render_template('timeline.html', message_count=count, thread_message_list=in_scope_thread_message_list, scope=scope, status=status)
 
 
 @timeline.route('/timeline', methods=['POST'])

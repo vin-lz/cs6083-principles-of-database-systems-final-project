@@ -38,6 +38,23 @@
                         {% if current_user.is_authenticated %}
                         <div class="navbar-item has-dropdown is-hoverable has-text-white has-background-dark">
                             <a class="navbar-link has-background-dark">
+                                Timeline
+                            </a>
+
+                            <div class="navbar-dropdown has-background-dark">
+                                <a class="navbar-item has-text-white" href="{{ url_for('timeline.load_thread') }}">
+                                    View
+                                </a>
+                                <a class="navbar-item has-text-white" href="{{ url_for('timeline.new_post') }}">
+                                    Create
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if current_user.is_authenticated %}
+                        <div class="navbar-item has-dropdown is-hoverable has-text-white has-background-dark">
+                            <a class="navbar-link has-background-dark">
                                 Follow
                             </a>
 
@@ -47,6 +64,9 @@
                                 </a>
                                 <a class="navbar-item has-text-white" href="{{ url_for('follow.neighbor') }}">
                                     Neighbors
+                                </a>
+                                <a class="navbar-item has-text-white" href="{{ url_for('location.block_members') }}">
+                                    Block Members
                                 </a>
                             </div>
                         </div>

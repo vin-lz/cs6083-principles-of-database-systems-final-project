@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="column is-6 is-offset-3">
+<div class="column is-8 is-offset-2">
     <h3 class="title">Message</h3>
     <div class="box">
         {% with messages = get_flashed_messages() %}
@@ -18,42 +18,66 @@
                     <form method="POST" action="/timeline">
                         <input type="hidden" name="scope" value="all">
                         <input type="hidden" name="status" value="all">
+                        {% if scope == 'all' and status =='all' %}
                         <input class="button is-primary" onclick="submit" type="submit" value="All">
+                        {% else %}
+                        <input class="button is-primary is-outlined" onclick="submit" type="submit" value="All">
+                        {% endif %}
                     </form>
                 </li>
                 <li>
                     <form method="POST" action="/timeline">
                         <input type="hidden" name="scope" value="all">
                         <input type="hidden" name="status" value="new">
+                        {% if scope == 'new' %}
+                        <input class="button is-primary" onclick="submit" type="submit" value="New">
+                        {% else %}
                         <input class="button is-primary is-outlined" onclick="submit" type="submit" value="New">
+                        {% endif %}
                     </form>
                 </li>
                 <li>
                     <form method="POST" action="/timeline">
                         <input type="hidden" name="scope" value="all">
                         <input type="hidden" name="status" value="unread">
+                        {% if status == 'unread' %}
+                        <input class="button is-primary" onclick="submit" type="submit" value="Unread">
+                        {% else %}
                         <input class="button is-primary is-outlined" onclick="submit" type="submit" value="Unread">
+                        {% endif %}
                     </form>
                 </li>
                 <li>
                     <form method="POST" action="/timeline">
                         <input type="hidden" name="scope" value="friend">
                         <input type="hidden" name="status" value="all">
+                        {% if scope == 'friend' %}
+                        <input class="button is-primary" onclick="submit" type="submit" value="Friend">
+                        {% else %}
                         <input class="button is-primary is-outlined" onclick="submit" type="submit" value="Friend">
+                        {% endif %}
                     </form>
                 </li>
                 <li>
                     <form method="POST" action="/timeline">
                         <input type="hidden" name="scope" value="block">
                         <input type="hidden" name="status" value="all">
+                        {% if scope == 'block' %}
+                        <input class="button is-primary" onclick="submit" type="submit" value="Block">
+                        {% else %}
                         <input class="button is-primary is-outlined" onclick="submit" type="submit" value="Block">
+                        {% endif %}
                     </form>
                 </li>
                 <li>
                     <form method="POST" action="/timeline">
                         <input type="hidden" name="scope" value="hood">
                         <input type="hidden" name="status" value="all">
+                        {% if scope == 'hood' %}
+                        <input class="button is-primary" onclick="submit" type="submit" value="Hood">
+                        {% else %}
                         <input class="button is-primary is-outlined" onclick="submit" type="submit" value="Hood">
+                        {% endif %}
                     </form>
                 </li>
             </ul>
