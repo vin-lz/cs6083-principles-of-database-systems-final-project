@@ -42,7 +42,15 @@ def login_post():
 
 @auth.route('/signup')
 def signup():
-    return render_template('signup.html')
+    city_list = City.query.all()
+    city_name_list = []
+    state_name_list = []
+    for i in city_list:
+        if i.cname not in city_name_list:
+            city_name_list.append(i.cname)
+        if i.cstate not in state_name_list:
+            state_name_list.append(i.cstate)
+    return render_template('signup.html', cities=city_name_list, states=state_name_list)
 
 
 @auth.route('/signup', methods=['POST'])

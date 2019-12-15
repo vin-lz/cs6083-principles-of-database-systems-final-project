@@ -22,6 +22,7 @@ from .models import Reply
 
 timeline = Blueprint('timeline', __name__)
 
+
 @timeline.route('/timeline')
 @login_required
 def load_thread(scope='all', status='all'):
@@ -69,6 +70,7 @@ def load_thread(scope='all', status='all'):
 
     return render_template('timeline.html', message_count=count, thread_message_list=in_scope_thread_message_list)
 
+
 @timeline.route('/timeline', methods=['POST'])
 @login_required
 def load_thread_filtered():
@@ -77,20 +79,13 @@ def load_thread_filtered():
     return load_thread(scope, status)
 
 
-# @timeline.route('/timeline', methods=['POST'])
-# @login_required
-# def load_message():
-#     return display_message(mid)
-
 @timeline.route('/post/<int:post_id>/', methods=['GET'])
 @login_required
 def display_message(post_id):
     if not Thread.query.filter_by(uid=current_user.id, mid=post_id).first():
         flash('You have no privilege to read this post')
         return redirect(url_for('timeline.load_thread'))
-    # post_id = 1
 
-    # message = Message.query.filter_by(id=post_id).first()
     message_info = {
         'message': Message.query.filter_by(id=post_id).first(),
         'author': Users.query.filter_by(id=Message.query.filter_by(id=post_id).first().author).first(),
@@ -113,7 +108,39 @@ def display_message(post_id):
     print('---------reply---------')
     print(reply_list)
 
-    Thread.query.filter_by(uid=current_user.id, mid=post_id).first().tstatus = 'read'
+    Thread.query.filter_by(uid=current_user.id,
+                           mid=post_id).first().tstatus = 'read'
     db.session.commit()
-    
+
     return render_template('post.html', message_info=message_info, reply_info_list=reply_info_list)
+
+@timeline.route('/new-post')
+@login_required
+def new_post():
+    return render_template('new-post.html')
+
+
+@timeline.route('/new-post', methods=['POST'])
+@login_required
+def new_post_post():
+    title = request.form.get('title')
+    content = request.form.get('content')
+    visibility = request.form.get('visibility')
+    new_message = Message(author=current_user.id, title=title, content=content, mtimestamp=datetime.now(), visibility=visibility)
+    if request.form.get('latitude') and request.form.get('longitude'):
+        latitude = request.form.get('latitude')
+        new_message.lat = latitude
+        longitude = request.form.get('longitude')
+        new_message.lng= longitude
+    if visibility == 'direct':
+        directed = request.form.get('direct-email')
+        if Users.query.filter_by(email=directed).first():
+            new_message.receiver = directed
+        else:
+            flash("User not found")
+            return redirect(url_for('timeline.new_post'))  
+
+    db.session.add(new_message)
+    db.session.commit()
+    flash('Message posted successfully')
+    return redirect(url_for('timeline.load_thread')) 
