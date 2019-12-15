@@ -127,7 +127,7 @@ def new_post_post():
     title = request.form.get('title')
     content = request.form.get('content')
     visibility = request.form.get('visibility')
-    new_message = Message(author=current_user.id, title=title, content=content, mtimestamp=datetime.now(), visibility=visibility)
+    new_message = Message(author=current_user.id, title=title, content=content, mtimestamp=datetime.now().replace(microsecond=0), visibility=visibility)
     if request.form.get('latitude') and request.form.get('longitude'):
         latitude = request.form.get('latitude')
         new_message.lat = latitude
@@ -184,7 +184,50 @@ def new_post_post():
             db.session.add(new_thread)
             db.session.commit()
 
+    # Add thread entry for every friend
+    if posted.visibility == 'friend':
+        results = []
+        results.extend(Friendship.query.filter_by(
+        followee=current_user.id, fstatus='accepted').all())
+        results.extend(Friendship.query.filter_by(
+        follower=current_user.id, fstatus='accepted').all())
+        friend_id_list = []
+        for i in results:
+            friend_id_list.append(i.follower)
+            friend_id_list.append(i.followee)
+        friend_id_list_sorted = list(set(friend_id_list))
+        for i in friend_id_list_sorted:
+            new_thread = Thread(uid=i, mid=posted.id, tstatus='unread', ttimestamp=posted.mtimestamp)
+            db.session.add(new_thread)
+            db.session.commit()
 
+    # Add thread entry for directed message target user
+    if posted.visibility == 'direct':
+        target = Users.query.filter_by(email=directed).first()
+        new_thread = Thread(uid=target.id, mid=posted.id, tstatus='unread', ttimestamp=posted.mtimestamp)
+        db.session.add(new_thread)
+        db.session.commit()
 
     flash('Message posted successfully')
     return redirect(url_for('timeline.load_thread')) 
+
+
+@timeline.route('/post/<int:post_id>/', methods=['POST'])
+@login_required
+def new_reply_post(post_id):
+    if not request.form.get('content'):
+        flash('Reply cannot be empty')
+        return redirect(url_for('timeline.display_message', post_id=post_id))
+    else:
+        content = request.form.get('content')
+        new_reply = Reply(mid=post_id, author=current_user.id, content=content, rtimestamp=datetime.now().replace(microsecond=0))
+        db.session.add(new_reply)
+        db.session.commit()
+
+        thread_list = Thread.query.filter_by(mid=post_id).all()
+        for i in thread_list:
+            i.tstatus = 'unread'
+            i.ttimestamp = datetime.now().replace(microsecond=0)
+        db.session.commit()
+        flash('Reply successful')
+        return redirect(url_for('timeline.display_message', post_id=post_id))

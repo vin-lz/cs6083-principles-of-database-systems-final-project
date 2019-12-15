@@ -12,8 +12,9 @@
         {% endif %}
         {% endwith %}
 
-        <p class="has-text-left">Content: <br />
-            <br><tb>
+        <p class="has-text-left">
+            <label class="label">Content:</label>
+            <br>
             {{ message_info.message.content }}</p>
         <br>
         <p class="has-text-right">- By {{ message_info.author.fname }} {{ message_info.author.lname }} at
@@ -33,6 +34,18 @@
         {% endfor %}
         {% endif %}
 
+
+
+
+        <form method="POST" action="{{ url_for('timeline.new_reply_post', post_id=message_info.message.id) }}">
+            <div class="field">
+                <label class="label has-text-left">Add reply</label>
+                <textarea class="textarea" name="content" placeholder="Write something here"></textarea>
+            </div>
+            <p class="control has-text-right">
+                <button class="button is-info">Reply</button>
+            </p>
+        </form>
     </div>
     <button class="button is-primary is-inverted" onclick="goBack()">Go Back</button>
 </div>

@@ -156,7 +156,7 @@ def new_follow(email, category):
         if followee:
             if not Friendship.query.filter_by(follower=current_user.id, followee=followee.id).first() and not Friendship.query.filter_by(follower=followee.id, followee=current_user.id).first():
                 
-                new_friendship = Friendship(follower=current_user.id, followee=followee.id, ftimestamp=datetime.now(), fstatus='pending')
+                new_friendship = Friendship(follower=current_user.id, followee=followee.id, ftimestamp=datetime.now().replace(microsecond=0), fstatus='pending')
                 db.session.add(new_friendship)
                 db.session.commit()
                 flash('An invitation has been sent.')
@@ -170,7 +170,7 @@ def new_follow(email, category):
         if followee:
             if not Neighboring.query.filter_by(initiator=current_user.id, acceptor=followee.id).first():
                 
-                new_neighbor = Neighboring(initiator=current_user.id, acceptor=followee.id, ntimestamp=datetime.now())
+                new_neighbor = Neighboring(initiator=current_user.id, acceptor=followee.id, ntimestamp=datetime.now().replace(microsecond=0))
                 db.session.add(new_neighbor)
                 db.session.commit()
                 flash('A neighbor is added.')

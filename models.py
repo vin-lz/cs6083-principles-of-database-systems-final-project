@@ -18,7 +18,7 @@ class Users(UserMixin, db.Model):
     cid = db.Column(db.Integer, db.ForeignKey('City.id'), nullable=False)
     uprofile = db.Column(db.Text)
     photo = db.Column(db.Text)
-    last_login_timestamp = db.Column(db.DateTime, default=datetime.now())
+    last_login_timestamp = db.Column(db.DateTime, default=datetime.now().replace(microsecond=0))
 
 
 class City(db.Model):
@@ -34,7 +34,7 @@ class Friendship(db.Model):
         'Users.id'), primary_key=True)
     followee = db.Column(db.Integer, db.ForeignKey(
         'Users.id'), primary_key=True)
-    ftimestamp = db.Column(db.DateTime, default=datetime.now())
+    ftimestamp = db.Column(db.DateTime, default=datetime.now().replace(microsecond=0))
     fstatus = db.Column(db.String(45), default='pending')
 
 
@@ -44,7 +44,7 @@ class Neighboring(db.Model):
         'Users.id'), primary_key=True)
     acceptor = db.Column(db.Integer, db.ForeignKey(
         'Users.id'), primary_key=True)
-    ntimestamp = db.Column(db.DateTime, default=datetime.now())
+    ntimestamp = db.Column(db.DateTime, default=datetime.now().replace(microsecond=0))
 
 
 class Hood(db.Model):
@@ -100,7 +100,7 @@ class Message(db.Model):
     author = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=False)
     title = db.Column(db.Text, nullable=False)
     content = db.Column(db.Text, nullable=False)
-    mtimestamp = db.Column(db.DateTime, default=datetime.now(), nullable=False)
+    mtimestamp = db.Column(db.DateTime, default=datetime.now().replace(microsecond=0), nullable=False)
     visibility = db.Column(db.String(45), nullable=False)
     receiver = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=True)
     lat = db.Column(db.Float, nullable=False)
@@ -113,7 +113,7 @@ class Reply(db.Model):
     mid = db.Column(db.Integer, db.ForeignKey('Message.id'), nullable=False)
     author = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    rtimestamp = db.Column(db.DateTime, default=datetime.now(), nullable=False)
+    rtimestamp = db.Column(db.DateTime, default=datetime.now().replace(microsecond=0), nullable=False)
 
 
 class Thread(db.Model):
@@ -123,4 +123,4 @@ class Thread(db.Model):
     mid = db.Column(db.Integer, db.ForeignKey('Message.id'),
                     nullable=False, primary_key=True)
     tstatus = db.Column(db.String(45), nullable=False, default='unread')
-    ttimestamp = db.Column(db.DateTime, default=datetime.now(), nullable=False)
+    ttimestamp = db.Column(db.DateTime, default=datetime.now().replace(microsecond=0), nullable=False)

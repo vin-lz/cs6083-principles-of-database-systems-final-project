@@ -94,7 +94,7 @@ def signup_post():
                     cname=city_name, cstate=city_state).first().id
 
             new_user = Users(email=email, fname=first_name, lname=last_name, pword=generate_password_hash(
-                new_password, method='sha256'), street_addr=street_address, cid=city_id, last_login_timestamp=datetime.now())
+                new_password, method='sha256'), street_addr=street_address, cid=city_id, last_login_timestamp=datetime.now().replace(microsecond=0))
 
             # add the new user to the database
             db.session.add(new_user)
