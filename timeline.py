@@ -12,6 +12,8 @@ from .models import Users
 from .models import City
 from .models import Friendship
 from .models import Neighboring
+from .models import Blocks
+from .models import Membership
 from .models import Thread
 from .models import Message
 from .models import Reply
@@ -73,3 +75,45 @@ def load_thread_filtered():
     scope = request.form.get('scope')
     status = request.form.get('status')
     return load_thread(scope, status)
+
+
+# @timeline.route('/timeline', methods=['POST'])
+# @login_required
+# def load_message():
+#     return display_message(mid)
+
+@timeline.route('/post/<int:post_id>/', methods=['GET'])
+@login_required
+def display_message(post_id):
+    if not Thread.query.filter_by(uid=current_user.id, mid=post_id).first():
+        flash('You have no privilege to read this post')
+        return redirect(url_for('timeline.load_thread'))
+    # post_id = 1
+
+    # message = Message.query.filter_by(id=post_id).first()
+    message_info = {
+        'message': Message.query.filter_by(id=post_id).first(),
+        'author': Users.query.filter_by(id=Message.query.filter_by(id=post_id).first().author).first(),
+        'block': Blocks.query.filter_by(id=(Membership.query.filter_by(uid=Users.query.filter_by(id=Message.query.filter_by(id=post_id).first().author).first().id).first().bid)).first()
+    }
+    print('---------message---------')
+    print(message_info)
+
+    reply_list = Reply.query.filter_by(mid=post_id).all()
+    reply_info_list = []
+    if reply_list:
+        for i in reply_list:
+            reply_info = {
+                'reply': i,
+                'author': Users.query.filter_by(id=i.author).first(),
+                'block': Blocks.query.filter_by(id=(Membership.query.filter_by(uid=i.author).first().bid)).first()
+            }
+            reply_info_list.append(reply_info)
+
+    print('---------reply---------')
+    print(reply_list)
+
+    Thread.query.filter_by(uid=current_user.id, mid=post_id).first().tstatus = 'read'
+    db.session.commit()
+    
+    return render_template('post.html', message_info=message_info, reply_info_list=reply_info_list)

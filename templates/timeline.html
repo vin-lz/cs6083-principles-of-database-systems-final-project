@@ -12,42 +12,6 @@
         {% endif %}
         {% endwith %}
 
-        <!-- <div class="tabs is-centered is-toggle">
-            <ul>
-              <li class="is-active">
-                <!-- <a>
-                    All
-                </a> -->
-        <!-- <form method="POST" action="/timeline">
-                        <input type="hidden" name="scope" value="all">
-                        <input type="hidden" name="status" value="all">
-                        <a class="" onclick="submit" type="submit" value="All">All</a>
-                </form>
-              </li>
-              <li>
-                <a>
-                    Unread
-                </a>
-              </li>
-              <li>
-                <a>
-                  Friend
-                </a>
-              </li>
-              <li>
-                <a>
-                  Block
-                </a>
-              </li>
-              <li>
-                <a>
-                  Neighborhood
-                </a>
-              </li>
-            </ul>
-          </div> -->
-
-
         <div class="tabs is-centered">
             <ul>
                 <li>
@@ -75,8 +39,7 @@
                     <form method="POST" action="/timeline">
                         <input type="hidden" name="scope" value="friend">
                         <input type="hidden" name="status" value="all">
-                        <input class="button is-primary is-outlined" onclick="submit" type="submit"
-                            value="Friend">
+                        <input class="button is-primary is-outlined" onclick="submit" type="submit" value="Friend">
                     </form>
                 </li>
                 <li>
@@ -110,7 +73,7 @@
             <tbody>
                 {% for i in thread_message_list %}
                 <tr>
-                    <td>{{ i[1].title }}</td>
+                    <td><a href="{{url_for('timeline.display_message', post_id=i[1].id) }}">{{ i[1].title }}</a></td>
                     <td>{{ i[2].fname }} {{ i[2].lname }}</td>
                     <td>{{ i[1].mtimestamp }}</td>
                 </tr>
@@ -119,5 +82,6 @@
         </table>
         {% endif %}
     </div>
+    <a class="button is-primary is-inverted" href="{{ url_for('main.index') }}">Go Back</a>
 </div>
 {% endblock %}
