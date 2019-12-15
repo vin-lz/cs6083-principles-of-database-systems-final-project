@@ -92,3 +92,35 @@ class Approval(db.Model):
     approvee = db.Column(db.Integer, db.ForeignKey(
         'Membership.uid'), primary_key=True)
     bid = db.Column(db.Integer, db.ForeignKey('Blocks.id'), primary_key=True)
+
+
+class Message(db.Model):
+    __tablename__ = 'Message'
+    id = db.Column(db.Integer, primary_key=True)
+    author = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=False)
+    title = db.Column(db.Text, nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    mtimestamp = db.Column(db.DateTime, default=datetime.now(), nullable=False)
+    visibility = db.Column(db.String(45), nullable=False)
+    receiver = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=True)
+    lat = db.Column(db.Float, nullable=False)
+    lng = db.Column(db.Float, nullable=False)
+
+
+class Reply(db.Model):
+    __tablename__ = 'Reply'
+    id = db.Column(db.Integer, primary_key=True)
+    mid = db.Column(db.Integer, db.ForeignKey('Message.id'), nullable=False)
+    author = db.Column(db.Integer, db.ForeignKey('Users.id'), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    rtimestamp = db.Column(db.DateTime, default=datetime.now(), nullable=False)
+
+
+class Thread(db.Model):
+    __tablename__ = 'Thread'
+    uid = db.Column(db.Integer, db.ForeignKey('Users.id'),
+                    nullable=False, primary_key=True)
+    mid = db.Column(db.Integer, db.ForeignKey('Message.id'),
+                    nullable=False, primary_key=True)
+    tstatus = db.Column(db.String(45), nullable=False, default='unread')
+    ttimestamp = db.Column(db.DateTime, default=datetime.now(), nullable=False)

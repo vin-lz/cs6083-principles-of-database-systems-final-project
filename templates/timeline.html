@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-6 is-offset-3">
+    <h3 class="title">Message</h3>
+    <div class="box">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="notification is-danger">
+            {{ messages[0] }}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        <!-- <div class="tabs is-centered is-toggle">
+            <ul>
+              <li class="is-active">
+                <!-- <a>
+                    All
+                </a> -->
+        <!-- <form method="POST" action="/timeline">
+                        <input type="hidden" name="scope" value="all">
+                        <input type="hidden" name="status" value="all">
+                        <a class="" onclick="submit" type="submit" value="All">All</a>
+                </form>
+              </li>
+              <li>
+                <a>
+                    Unread
+                </a>
+              </li>
+              <li>
+                <a>
+                  Friend
+                </a>
+              </li>
+              <li>
+                <a>
+                  Block
+                </a>
+              </li>
+              <li>
+                <a>
+                  Neighborhood
+                </a>
+              </li>
+            </ul>
+          </div> -->
+
+
+        <div class="tabs is-centered">
+            <ul>
+                <li>
+                    <form method="POST" action="/timeline">
+                        <input type="hidden" name="scope" value="all">
+                        <input type="hidden" name="status" value="all">
+                        <input class="button is-primary" onclick="submit" type="submit" value="All">
+                    </form>
+                </li>
+                <li>
+                    <form method="POST" action="/timeline">
+                        <input type="hidden" name="scope" value="all">
+                        <input type="hidden" name="status" value="new">
+                        <input class="button is-primary is-outlined" onclick="submit" type="submit" value="New">
+                    </form>
+                </li>
+                <li>
+                    <form method="POST" action="/timeline">
+                        <input type="hidden" name="scope" value="all">
+                        <input type="hidden" name="status" value="unread">
+                        <input class="button is-primary is-outlined" onclick="submit" type="submit" value="Unread">
+                    </form>
+                </li>
+                <li>
+                    <form method="POST" action="/timeline">
+                        <input type="hidden" name="scope" value="friend">
+                        <input type="hidden" name="status" value="all">
+                        <input class="button is-primary is-outlined" onclick="submit" type="submit"
+                            value="Friend">
+                    </form>
+                </li>
+                <li>
+                    <form method="POST" action="/timeline">
+                        <input type="hidden" name="scope" value="block">
+                        <input type="hidden" name="status" value="all">
+                        <input class="button is-primary is-outlined" onclick="submit" type="submit" value="Block">
+                    </form>
+                </li>
+                <li>
+                    <form method="POST" action="/timeline">
+                        <input type="hidden" name="scope" value="hood">
+                        <input type="hidden" name="status" value="all">
+                        <input class="button is-primary is-outlined" onclick="submit" type="submit" value="Hood">
+                    </form>
+                </li>
+            </ul>
+        </div>
+
+        {% if message_count == 0 %}
+        <h3 class="subtitle  is-4 has-text-primary">It's empty</h3>
+        {% else %}
+        <table class="table is-fullwidth">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in thread_message_list %}
+                <tr>
+                    <td>{{ i[1].title }}</td>
+                    <td>{{ i[2].fname }} {{ i[2].lname }}</td>
+                    <td>{{ i[1].mtimestamp }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

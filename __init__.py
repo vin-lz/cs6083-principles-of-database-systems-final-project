@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 # ------------------------------------------------------------------------------
 from flask_login import LoginManager
 # ------------------------------------------------------------------------------
-import logging
+# import logging
 # ------------------------------------------------------------------------------
 
 # logging.basicConfig()
@@ -39,10 +39,12 @@ def create_app():
     from .follow import follow as follow_blueprint
     from .location import location as location_blueprint
     from .account import acc as account_blueprint
+    from .timeline import timeline as timeline_blueprint
     app.register_blueprint(auth_blueprint)
     app.register_blueprint(follow_blueprint)
     app.register_blueprint(location_blueprint)
     app.register_blueprint(account_blueprint)
+    app.register_blueprint(timeline_blueprint)
 
     # blueprint for non-auth parts of app
     from .main import main as main_blueprint
