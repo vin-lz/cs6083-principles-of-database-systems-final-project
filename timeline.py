@@ -17,6 +17,7 @@ from .models import Membership
 from .models import Thread
 from .models import Message
 from .models import Reply
+from .models import Location
 # ------------------------------------------------------------------------------
 
 
@@ -142,5 +143,48 @@ def new_post_post():
 
     db.session.add(new_message)
     db.session.commit()
+
+    posted = Message.query.filter_by(author=current_user.id, mtimestamp=new_message.mtimestamp).first()
+
+    print('---posted---')
+    print(posted)
+
+    # Add thread entry for every users in that hood
+    if posted.visibility == 'hood':
+        membership = Membership.query.filter_by(uid=current_user.id).first()
+        if membership:
+            bid = membership.bid
+            hid = Location.query.filter_by(bid=bid).first().hid
+            blocks_in_hood = Location.query.filter_by(hid=hid).all()
+            bid_list = []
+            for i in blocks_in_hood:
+                bid_list.append(i.bid)
+            members_in_hood = []
+            for i in bid_list:
+                members_in_hood.extend(Membership.query.filter_by(bid=i).all())
+            users_list = []
+            for i in members_in_hood:
+                users_list.append(Users.query.filter_by(id=i.uid).first())
+        for i in users_list:
+            new_thread = Thread(uid=i.id, mid=posted.id, tstatus='unread', ttimestamp=posted.mtimestamp)
+            db.session.add(new_thread)
+            db.session.commit()
+    
+    # Add thread entry for every users in that block
+    if posted.visibility == 'block':
+        membership = Membership.query.filter_by(uid=current_user.id).first()
+        if membership:
+            bid = membership.bid
+            members_in_block = Membership.query.filter_by(bid=bid).all()
+            users_list = []
+            for i in members_in_block:
+                users_list.append(Users.query.filter_by(id=i.uid).first())
+        for i in users_list:
+            new_thread = Thread(uid=i.id, mid=posted.id, tstatus='unread', ttimestamp=posted.mtimestamp)
+            db.session.add(new_thread)
+            db.session.commit()
+
+
+
     flash('Message posted successfully')
     return redirect(url_for('timeline.load_thread')) 
