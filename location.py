@@ -14,6 +14,8 @@ from .models import Hood
 from .models import Location
 from .models import Membership
 from .models import Approval
+from .models import Thread
+from .models import Message
 # ------------------------------------------------------------------------------
 
 location = Blueprint('location', __name__)
@@ -156,4 +158,5 @@ def block_members_post():
 @location.route('/map')
 @login_required
 def map():
-    return render_template('map.html')
+    co = [ {'lat': 40.70, 'lng' : -73.99}, {'lat': 40.71, 'lng' : -73.98} ]
+    return render_template('map.html', locations=co)
