@@ -322,7 +322,7 @@ CREATE TABLE `Users` (
   `cid` int(10) unsigned NOT NULL,
   `uprofile` varchar(140) DEFAULT NULL,
   `photo` varchar(45) DEFAULT NULL,
-  `last_login_timestamp` timestamp NULL DEFAULT NULL,
+  `last_logout_timestamp` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`uid`),
   KEY `city_idx` (`cid`),
   CONSTRAINT `user_city` FOREIGN KEY (`cid`) REFERENCES `city` (`cid`) ON DELETE CASCADE ON UPDATE CASCADE

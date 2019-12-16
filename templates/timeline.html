@@ -2,7 +2,11 @@
 
 {% block content %}
 <div class="column is-8 is-offset-2">
+    {% if not search %}
     <h3 class="title">Message</h3>
+    {% else %}
+    <h3 class="title">Search results</h3>
+    {% endif %}
     <div class="box">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -12,6 +16,7 @@
         {% endif %}
         {% endwith %}
 
+        {% if not search %}
         <div class="tabs is-centered">
             <ul>
                 <li>
@@ -80,8 +85,21 @@
                         {% endif %}
                     </form>
                 </li>
+
+                <li>
+                    <form method="POST" action="/timeline">
+                        <input type="hidden" name="scope" value="own">
+                        <input type="hidden" name="status" value="all">
+                        {% if scope == 'hood' %}
+                        <input class="button is-primary" onclick="submit" type="submit" value="Own">
+                        {% else %}
+                        <input class="button is-primary is-outlined" onclick="submit" type="submit" value="Own">
+                        {% endif %}
+                    </form>
+                </li>
             </ul>
         </div>
+        {% endif %}
 
         {% if message_count == 0 %}
         <h3 class="subtitle  is-4 has-text-primary">It's empty</h3>

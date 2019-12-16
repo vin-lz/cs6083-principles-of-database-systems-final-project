@@ -18,7 +18,7 @@ class Users(UserMixin, db.Model):
     cid = db.Column(db.Integer, db.ForeignKey('City.id'), nullable=False)
     uprofile = db.Column(db.Text)
     photo = db.Column(db.Text)
-    last_login_timestamp = db.Column(db.DateTime, default=datetime.now().replace(microsecond=0))
+    last_logout_timestamp = db.Column(db.DateTime, default=datetime.now().replace(microsecond=0))
 
 
 class City(db.Model):

@@ -15,6 +15,16 @@
         {% endif %}
         {% endwith %}
         <form method="POST" action="/account">
+            <label class="label has-text-left">Photo</label>
+            <div class="level">
+            <figure class="image is-96x96 is-level-left">
+                <img class="is-rounded" src={{ user.photo }}/>
+            </figure>
+            <div class="control is-level-right">
+                <a class="button is-info is-right" href="">Change</a>
+            </div>
+        </div>
+            
             <label class="label has-text-left">Email</label>
             <p class="has-text-left">{{ user.email }}</p>
 

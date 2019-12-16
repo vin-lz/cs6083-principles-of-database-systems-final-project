@@ -14,4 +14,4 @@ INSERT INTO Users(email, pword, fname, lname, street_addr, cid) VALUES
 ('killmenow@optonline.net', 'pword1', 'Todd', 'Carl', '68 Oakwood Drive', 3),
 ('vin_lz@outlook.com', 'pword1', 'Vin', 'Liu', '110 1st St', 3);
 SELECT * FROM Users;
-UPDATE Users SET last_login_timestamp = '2017-01-01 00:00:00' WHERE uid = 11;
+UPDATE Users SET last_logout_timestamp = '2017-01-01 00:00:00' WHERE uid = 11;

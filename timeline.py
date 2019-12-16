@@ -26,55 +26,87 @@ timeline = Blueprint('timeline', __name__)
 
 @timeline.route('/timeline')
 @login_required
-def load_thread(scope='all', status='all'):
-    # status = 'unread'
-    # scope='hood'
+def load_thread(scope='all', status='all', search=False, keyword=""):
+    # Handle the search
+    if search:
+        to_search = '%{}%'.format(keyword)
+        print("---------to search-----")
+        print(to_search)
+        message_list = Message.query.filter(Message.content.like(to_search) | Message.title.like(to_search)).all()
+        print("----message_list-----")
+        print(message_list)
+        thread_list = []
+        for i in message_list:
+            to_display = Thread.query.filter_by(uid=current_user.id, mid=i.id).first()
+            if to_display != None:
+                thread_list.append(to_display)
+        in_scope_thread_message_users_list = []
+        count = 0
+        print('---- all thread_list----')
+        print(thread_list)
+        for i in thread_list:
+            message = Message.query.filter_by(id=i.mid).first()
+            author = Users.query.filter_by(id=message.author).first()
+            in_scope_thread_message_users_list.append([i, message, author])
+            count += 1
+        
+        return render_template('timeline.html', message_count=count, thread_message_list=in_scope_thread_message_users_list, search=search)
+
+
     # Gather all thread
     print('---- parameters----')
     print(scope, status)
     thread_list = Thread.query.filter_by(uid=current_user.id).all()
     count = 0
-    in_scope_thread_message_list = []
+    in_scope_thread_message_users_list = []
     print('---- all thread_list----')
     print(thread_list)
-    # When display all
-    if scope == 'all':
-        if status == 'unread':
-            for i in thread_list:
-                if i.tstatus != 'unread':
-                    thread_list.remove(i)
-        for i in thread_list:
-            message = Message.query.filter_by(id=i.mid).first()
-            author = Users.query.filter_by(id=message.author).first()
-            in_scope_thread_message_list.append([i, message, author])
-            count += 1
-        return render_template('timeline.html', message_count=count, thread_message_list=in_scope_thread_message_list, scope=scope, status=status)
 
-    # Filter to find those meeting the scope
     for i in thread_list:
-        message = Message.query.filter_by(id=i.mid).first()
-        if message.visibility == scope:
-            author = Users.query.filter_by(id=message.author).first()
-            in_scope_thread_message_list.append([i, message, author])
-            count += 1
-    print('----in_scope_thread_message_list----')
-    print(in_scope_thread_message_list)
+        if scope == 'own':
+            message = Message.query.filter_by(id=i.mid).first()
+            if message.author == current_user.id:
+                author = Users.query.filter_by(id=message.author).first()
+                in_scope_thread_message_users_list.append([i, message, author])
+                count += 1
+        elif scope != 'all':
+            message = Message.query.filter_by(id=i.mid).first()
+            if message.visibility == scope:
+                author = Users.query.filter_by(id=message.author).first()
+                if author.id != current_user.id:
+                    in_scope_thread_message_users_list.append([i, message, author])
+                    count += 1
+        else:
+            if status == 'unread':
+                if i.tstatus == 'unread':
+                    message = Message.query.filter_by(id=i.mid).first()
+                    author = Users.query.filter_by(id=message.author).first()
+                    if author.id != current_user.id:
+                        in_scope_thread_message_users_list.append([i, message, author])
+                        count += 1
+            elif status == 'new':
+                if i.ttimestamp > current_user.last_logout_timestamp:
+                    message = Message.query.filter_by(id=i.mid).first()
+                    author = Users.query.filter_by(id=message.author).first()
+                    if author.id != current_user.id:
+                        in_scope_thread_message_users_list.append([i, message, author])
+                        count += 1
+            else:
+                message = Message.query.filter_by(id=i.mid).first()
+                author = Users.query.filter_by(id=message.author).first()
+                if author.id != current_user.id:
+                    in_scope_thread_message_users_list.append([i, message, author])
+                    count += 1
 
-    # If unread only
-    if status == 'unread':
-        for i in in_scope_thread_message_list:
-            if i[0].tstatus != 'unread':
-                in_scope_thread_message_list.remove(i)
-                count -= 1
-    print('----unread_in_scope_thread_message_list----')
-    print(in_scope_thread_message_list)
-
-    return render_template('timeline.html', message_count=count, thread_message_list=in_scope_thread_message_list, scope=scope, status=status)
+    print("count %d" % count)
+    return render_template('timeline.html', message_count=count, thread_message_list=in_scope_thread_message_users_list, scope=scope, status=status)
 
 
 @timeline.route('/timeline', methods=['POST'])
 @login_required
 def load_thread_filtered():
+    if request.form.get('search') == 'True':
+        return load_thread(search=True, keyword=request.form.get('keyword'))
     scope = request.form.get('scope')
     status = request.form.get('status')
     return load_thread(scope, status)
@@ -231,3 +263,4 @@ def new_reply_post(post_id):
         db.session.commit()
         flash('Reply successful')
         return redirect(url_for('timeline.display_message', post_id=post_id))
+

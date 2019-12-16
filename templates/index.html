@@ -4,6 +4,24 @@
 <h1 class="title">
     CS-GY6083 Principle of Database Systems Final Project
 </h1>
-<p>Hi! Would you like to help us to verify a new member in your block? 
-<a href="{{ url_for('location.block_members') }}">Click here</a></p>
+<br>
+<p class="columns is-desktop is-vcentered is-centered">
+    Hi! Would you like to help us to verify a new member in your block?
+    <a href="{{ url_for('location.block_members') }}">
+        Click here
+    </a>
+</p>
+<br>
+<form method="POST" action="/timeline">
+    <div class="field has-addons columns is-desktop is-vcentered is-centered">
+
+        <div class="control">
+            <input class="input" type="text" name="keyword" placeholder="Find a message">
+        </div>
+        <div class="control">
+            <button class="button is-info" name="search" value="True">Search</button>
+        </div>
+
+    </div>
+</form>
 {% endblock %}

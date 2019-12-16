@@ -94,7 +94,7 @@ def signup_post():
                     cname=city_name, cstate=city_state).first().id
 
             new_user = Users(email=email, fname=first_name, lname=last_name, pword=generate_password_hash(
-                new_password, method='sha256'), street_addr=street_address, cid=city_id, last_login_timestamp=datetime.now().replace(microsecond=0))
+                new_password, method='sha256'), street_addr=street_address, cid=city_id, photo='/static/default.png', last_logout_timestamp=datetime.now().replace(microsecond=0))
 
             # add the new user to the database
             db.session.add(new_user)
@@ -110,5 +110,7 @@ def signup_post():
 @auth.route('/logout')
 @login_required
 def logout():
+    current_user.last_logout_timestamp=datetime.now().replace(microsecond=0)
+    db.session.commit()
     logout_user()
     return redirect(url_for('main.index'))

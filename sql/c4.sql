@@ -1,6 +1,6 @@
 -- List all threads that have new messages cince last time access
 SET @query_user = 11;
-SET @llt = (SELECT last_login_timestamp FROM Users AS u
+SET @llt = (SELECT last_logout_timestamp FROM Users AS u
 WHERE u.uid = @query_user);
 
 SELECT mid FROM Thread 

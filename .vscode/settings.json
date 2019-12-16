@@ -24,11 +24,13 @@
         "rtimestamp",
         "signup",
         "sqlite",
+        "strptime",
         "tstatus",
         "ttimestamp",
         "unfollow",
         "unfollowed",
         "uprofile",
+        "vcentered",
         "werkzeug"
     ]
 }
