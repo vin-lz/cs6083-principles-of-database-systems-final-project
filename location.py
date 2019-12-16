@@ -151,3 +151,9 @@ def block_members_post():
                 db.session.commit()
 
     return redirect(url_for('location.block_members'))
+
+
+@location.route('/map')
+@login_required
+def map():
+    return render_template('map.html')

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css"/>
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+    <style>
+        #map {
+            width: 800px;
+            height: 800px;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="hero is-primary is-fullheight">
+        <div class="hero-head">
+            <nav class="navbar has-background-dark" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false"
+                        data-target="navbarBasicExample">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                {% if current_user.is_authenticated %}
+                <div class="navbar-start">
+                    <p class="navbar-item">
+                        Welcome back, {{ current_user.fname }} {{ current_user.lname }}!
+                    </p>
+                </div>
+                {% endif %}
+                <div id="navbarMenuHeroA" class="navbar-menu ">
+                    <div class="navbar-end">
+                        <a href="{{ url_for('main.index') }}" class="navbar-item">
+                            Home
+                        </a>
+
+                        {% if current_user.is_authenticated %}
+                        <div class="navbar-item has-dropdown is-hoverable has-text-white has-background-dark">
+                            <a class="navbar-link has-background-dark">
+                                Timeline
+                            </a>
+
+                            <div class="navbar-dropdown has-background-dark">
+                                <a class="navbar-item has-text-white" href="{{ url_for('timeline.load_thread') }}">
+                                    View
+                                </a>
+                                <a class="navbar-item has-text-white" href="{{ url_for('timeline.new_post') }}">
+                                    Create
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if current_user.is_authenticated %}
+                        <div class="navbar-item has-dropdown is-hoverable has-text-white has-background-dark">
+                            <a class="navbar-link has-background-dark">
+                                Follow
+                            </a>
+
+                            <div class="navbar-dropdown has-background-dark">
+                                <a class="navbar-item has-text-white" href="{{ url_for('follow.friendship') }}">
+                                    Friends
+                                </a>
+                                <a class="navbar-item has-text-white" href="{{ url_for('follow.neighbor') }}">
+                                    Neighbors
+                                </a>
+                                <a class="navbar-item has-text-white" href="{{ url_for('location.block_members') }}">
+                                    Block Members
+                                </a>
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('acc.account') }}" class="navbar-item">
+                            Account
+                        </a>
+                        {% endif %}
+
+                        {% if not current_user.is_authenticated %}
+                        <a href="{{ url_for('auth.login') }}" class="navbar-item">
+                            Login
+                        </a>
+                        <a href="{{ url_for('auth.signup') }}" class="navbar-item">
+                            Sign Up
+                        </a>
+                        {% endif %}
+
+                        {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('auth.logout') }}" class="navbar-item">
+                            Logout
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <div class="column is-8 is-offset-2">
+                    <div id="map"></div>
+
+                    <script src="./keys.js"></script>
+                    <script>
+                        let map;
+                        document.addEventListener("DOMContentLoaded", () => {
+                            let s = document.createElement("script");
+                            document.head.appendChild(s);
+                            s.addEventListener("load", () => {
+                                //script has loaded
+                                console.log("script has loaded");
+                                map = new google.maps.Map(document.getElementById("map"), {
+                                    center: {
+                                        lat: 40.692532,
+                                        lng: -73.990997
+                                    },
+                                    zoom: 12,
+                                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                                });
+                            });
+                            s.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyCDhLJnnB51_iYVjhDwH9EKspVTi39dbcI`;
+                        });
+                    </script>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
