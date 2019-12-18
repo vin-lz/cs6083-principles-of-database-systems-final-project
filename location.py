@@ -66,11 +66,21 @@ def blocks():
 @login_required
 def join_block():
     to_join_block_id = request.form.get('to-join')
-    if get_my_membership():
-        db.session.delete(get_my_membership())
-        db.session.commit()
-    db.session.add(Membership(uid=current_user.id,
-                              bid=to_join_block_id, approval_count=0))
+    my_current_membership = get_my_membership()
+    if my_current_membership:
+        approvals = Approval.query.filter_by(approvee=current_user.id, bid=my_current_membership.bid).all()
+        if approvals:
+            for i in approvals:
+                db.session.delete(i)
+        if my_current_membership.approval_count == -1:
+            Blocks.query.filter_by(id=my_current_membership.bid).first().bpopulation -= 1
+        db.session.delete(my_current_membership)
+    block_to_join = Blocks.query.filter_by(id=to_join_block_id).first()
+    if block_to_join.bpopulation == 0:
+        db.session.add(Membership(uid=current_user.id, bid=to_join_block_id, approval_count=-1))
+        block_to_join.bpopulation += 1
+    else:
+        db.session.add(Membership(uid=current_user.id, bid=to_join_block_id, approval_count=0))
     db.session.commit()
     flash('You are joining %s. Membership is pending approval' %
           Blocks.query.filter_by(id=to_join_block_id).first().bname)
