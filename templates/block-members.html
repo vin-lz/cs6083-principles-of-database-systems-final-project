@@ -10,6 +10,10 @@
     <h1 class="title">
         You aren't a member of this block.
     </h1>
+    {% elif status == 'No-membership' %}
+    <h1 class="title">
+        You aren't a member of any blocks.
+    </h1>
     {% else %}
     <h1 class="title">
         Block Members

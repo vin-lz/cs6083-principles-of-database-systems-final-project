@@ -90,7 +90,7 @@
                     <form method="POST" action="/timeline">
                         <input type="hidden" name="scope" value="own">
                         <input type="hidden" name="status" value="all">
-                        {% if scope == 'hood' %}
+                        {% if scope == 'own' %}
                         <input class="button is-primary" onclick="submit" type="submit" value="Own">
                         {% else %}
                         <input class="button is-primary is-outlined" onclick="submit" type="submit" value="Own">

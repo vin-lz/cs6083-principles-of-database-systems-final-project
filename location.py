@@ -131,6 +131,8 @@ def block_members():
             return render_template('block-members.html', status='Pending')
         else:
             return render_template('block-members.html', status='Not')
+    else:
+        return render_template('block-members.html', status='No-membership')
 
     return render_template('block-members.html', pending_count=pending_count, pending_users_membership=pending_users_membership, approved_users_membership=approved_users_membership, approved_count=approved_count)
 
