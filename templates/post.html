@@ -17,8 +17,12 @@
             <br>
             {{ message_info.message.content }}</p>
         <br>
+        {% if message_info.block != None %}
         <p class="has-text-right">- By {{ message_info.author.fname }} {{ message_info.author.lname }} at
             {{ message_info.block.bname }}</p>
+        {% else %}
+        <p class="has-text-right">- By {{ message_info.author.fname }} {{ message_info.author.lname }}</p>
+        {% endif %}
         <p class="has-text-right">{{ message_info.message.mtimestamp }}</p>
 
         {% if reply_list != None %}
@@ -29,7 +33,11 @@
             <br>
             {{ i.reply.content }}</p>
         <br>
+        {% if i.block != None %}
         <p class="has-text-right">- By {{ i.author.fname }} {{ i.author.lname }} at {{ i.block.bname }}</p>
+        {% else %}
+        <p class="has-text-right">- By {{ i.author.fname }} {{ i.author.lname }}</p>
+        {% endif %}
         <p class="has-text-right">{{ i.reply.rtimestamp }}</p>
         <hr>
         {% endfor %}

@@ -119,11 +119,19 @@ def display_message(post_id):
         flash('You have no privilege to read this post')
         return redirect(url_for('timeline.load_thread'))
 
-    message_info = {
-        'message': Message.query.filter_by(id=post_id).first(),
-        'author': Users.query.filter_by(id=Message.query.filter_by(id=post_id).first().author).first(),
-        'block': Blocks.query.filter_by(id=(Membership.query.filter_by(uid=Users.query.filter_by(id=Message.query.filter_by(id=post_id).first().author).first().id).first().bid)).first()
-    }
+    if Membership.query.filter_by(uid=Users.query.filter_by(id=Message.query.filter_by(id=post_id).first().author).first().id).first() != None:
+        message_info = {
+            'message': Message.query.filter_by(id=post_id).first(),
+            'author': Users.query.filter_by(id=Message.query.filter_by(id=post_id).first().author).first(),
+            'block': Blocks.query.filter_by(id=(Membership.query.filter_by(uid=Users.query.filter_by(id=Message.query.filter_by(id=post_id).first().author).first().id).first().bid)).first()
+        }
+    else :
+        message_info = {
+            'message': Message.query.filter_by(id=post_id).first(),
+            'author': Users.query.filter_by(id=Message.query.filter_by(id=post_id).first().author).first(),
+            'block': None
+        }
+
     print('---------message---------')
     print(message_info)
 
@@ -197,6 +205,11 @@ def new_post_post():
             users_list = []
             for i in members_in_hood:
                 users_list.append(Users.query.filter_by(id=i.uid).first())
+        else:
+            flash('You haven\'t joined any hood yet')
+            db.session.delete(posted)
+            db.session.commit()
+            return redirect(url_for('timeline.new_post'))
         for i in users_list:
             new_thread = Thread(uid=i.id, mid=posted.id, tstatus='unread', ttimestamp=posted.mtimestamp)
             db.session.add(new_thread)
@@ -211,6 +224,10 @@ def new_post_post():
             users_list = []
             for i in members_in_block:
                 users_list.append(Users.query.filter_by(id=i.uid).first())
+        else:
+            flash('You haven\'t joined any block yet')
+            db.session.delete(posted)
+            db.session.commit()
         for i in users_list:
             new_thread = Thread(uid=i.id, mid=posted.id, tstatus='unread', ttimestamp=posted.mtimestamp)
             db.session.add(new_thread)
