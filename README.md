@@ -18,4 +18,4 @@ This is a repository for the Final Project for CS-GY 6083 Principles of Database
 ## Known issues
 * Browser adaptation issue (not very likely though) - For best visual effect, please use `Chrome`
 ## License
-Please note this is a coursework. Any re-use of these codes can result in **PLAGIARISM**. Refer to these codes at your own risk.
+Please note this is a coursework. Any re-use of these codes and documents can result in **PLAGIARISM**. Refer to these codes at your own risk.
